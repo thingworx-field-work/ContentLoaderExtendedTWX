@@ -138,7 +138,7 @@ default layout is as following:
 	configDir = "${baseDir}/configfiles" // folder location of the metadata.xml file
 	entitiesDir = "${baseDir}/configfiles/Entities" // folder location Entities that are included with the extension
 	zipDir = "${baseDir}/zip" // where to store the generated zip 
-	thingworxSdkDir = "${baseDir}/lib/twxSdk" // where the thingworx sdk is located
+	thingworxSdkDir = "${baseDir}/lib/common" // where the thingworx sdk is located
 ```
 
 The thingworx related gradle tasks are:
