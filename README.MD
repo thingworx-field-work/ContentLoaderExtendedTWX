@@ -146,6 +146,63 @@ The thingworx related gradle tasks are:
 * `packageExtension`: creates in the zipDir an zip archive with the extension
 * `upload`: uploads the extension to the specified TWX server.
 
+
+## Unit testing framework
+
+This repository contains now a test suite that can be executed to verify compatibility with the desired ThingWorx version. These tests are intended to be executed each time when testing a new ThingWorx version or when adding/changing functionalities.
+
+### Testing framework reference
+
+When adding a new end-user intended Service, a unit test should be added for that functionality.
+
+The testing framework has the following characteristics:
+
+- each test is defined as a ThingWorx service
+- tests have access to the previous test results inside of them; they pass an empty `INFOTABLE` for this purpose, to which rows are added after each test execution
+- there are pre- and post- services: `CreateTestData` and `DeleteTestData`; `CreateTestData` returns a JSON configuration field that is intended to be consumed by the tests themselves.
+- all tests are executed via the `RunAllTests` (or via `RunAllTestsFormatResult` that returns the result as a `HTML` that can be saved as test result artefact).
+
+#### How to run the tests:
+
+1. Install [Mockoon](https://mockoon.com/). This is an open-source application that allows designing and running mock REST APIs. It offers desktop clients for Windows, Linux and Mac.A list of test endpoints has been created for the tests defined in this extension. 
+2. Copy in clipboard all the content of the `testEntities/mockoon_test_endpoints.json`
+3. In Mockoon, select File/New local environment from clipboard ![alt text](image.png)
+4. Download the `testEntities/ContentLoaderExtended.Tests.xml` and Import / From File.
+5. In Thingworx, navigate to `ContentLoaderExtended.Tests` Thing
+6. Execute the service `RunAllTests:INFOTABLE`
+
+#### How to **add a new test**:
+
+1. **Navigate** to `ContentLoaderExtended.Tests` Thing
+2. **Edit** the `CreateTestData` Service. Duplicate a test and add it at the end.
+
+   Increment the test number and its associated variable names. Modify the `TestName`, `ServiceName`, `InputParams` and `ExpectedOutput` fields as needed for your test - all are mandatory.
+
+   ```javascript
+   //test 7
+   let test7 = {
+       TestName: "7. Basic Authenticated Post",
+       ServiceName: "BasicAuthPost",
+       InputParams: {
+            URLEndpoint: str_HTTP+str_BaseURL+"TestPostServiceBasicAuth",
+            User:"myUser",
+            Password:"myPassword"
+       },
+       ExpectedOutput: {
+            Response: "{\"MySampleKey\":\"MySampleValue\"}"
+       }
+   };
+   result.tests.push(test7);
+   ```
+
+3. **Duplicate** one of the existing test services (eg: `BasicAuthGet`).
+
+   Use for the new service the `ServiceName` chosen above.
+   In your test implementation use the `InputParams` and `ExpectedOutput` defined above.
+   Note that you have access to the `PreviousTestResults`, but typically you should use only the `InputParams` and `ExpectedOutputs`.
+
+4. **Save** all your modifications and **execute** `RunAllTests`. All tests should pass.
+
 # Disclaimer
 
 This Extension is provided as-is and without warranty or support. It is not part of the PTC product
