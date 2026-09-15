@@ -21,13 +21,15 @@ buildscript {
     }
 }
 
-project.sourceCompatibility = 1.8
-project.targetCompatibility = 1.8
+java {
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+}
 
 // set the properties accordingly
 project.ext {
     incrementVersionNumber = true
-    extensionJar = "ContentLoaderExtened_Extension.jar"
+    extensionJar = "ContentLoaderExtended_Extension.jar"
     baseDir = projectDir
     common = 'common'
     uiDir = "${baseDir}/ui" // if there are any widgets
@@ -47,8 +49,6 @@ project.ext {
 
 repositories {
     mavenCentral()
-    jcenter()
-
     flatDir {
         dirs project.ext.thingworxSdkDir
     }
@@ -71,27 +71,24 @@ clean.doFirst {
 
 configurations {
     packageDependencies
-    compile {
-        extendsFrom packageDependencies
-    }
 }
+configurations.implementation.extendsFrom(configurations.packageDependencies)
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation'junit:junit:4.12'
     // compile dependencies are dependencies that you know that already exist in Tomcat
-    compile group: 'commons-io', name: 'commons-io', version: '2.5'
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
-    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.6'
-
+    packageDependencies 'commons-io:commons-io:2.15.1'
+    packageDependencies 'org.apache.httpcomponents:httpclient:4.5.3'
+    compileOnly 'org.apache.httpcomponents:httpmime:4.5.6'
+    compileOnly fileTree(dir: project.ext.thingworxSdkDir,include: ['*.jar'])
     // we depend on the thingworx sdk that should be in the thingorxSdkDir
-    compile fileTree(dir: project.ext.thingworxSdkDir, include: ['*.jar'])
     // package dependencies are external dependences that are also written in the metadata.xml under JarResoruces
     // include all local jar, and other jars using manven
     packageDependencies fileTree(dir: project.ext.localJarDir, include: ['**/*.jar'])
 }
 
 jar {
-    archiveName = project.ext.extensionJar
+    archiveFileName = project.ext.extensionJar
     manifest {
         attributes(["Built-By"  : project.ext.packageVendor,
                     "Build-Date": new Date().format("yyyy-MM-dd HH:mm:ss")])
@@ -167,9 +164,9 @@ task prepPackage(dependsOn: jar) {
     }
 }
 
-task packageExtension(type: Zip, dependsOn: prepPackage, overwrite: true) {
-    archiveName = "${project.name}.zip"
-    destinationDir = new File(project.ext.zipDir)
+task packageExtension(type: Zip, dependsOn: prepPackage) {
+    archiveFileName = "${project.name}.zip"
+    destinationDirectory = new File(project.ext.zipDir)
     from "${buildDir}/zip/"
 }
 
