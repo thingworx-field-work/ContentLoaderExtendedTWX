@@ -149,38 +149,63 @@ let result = Resources.ContentLoaderExtended.ExecuteHttpMultipartRequest(
 
 ## Development
 
-After cloning the repository, please add the following files into `lib/common`. These files can be
-obtained from the ThingWorx installation directory,
-in `/apache-tomcat/webapps/Thingworx/WEB-INF/lib`.
-The version numbers listed below should serve as just a recommendation, as the actual file versions
-found in the ThingWorx installation directory might be different.
+The build uses the Gradle wrapper (Gradle 9) and needs a JDK 17 or newer to run.
 
-* `json-20171018.jar`
-* `thingworx-common-9.2.3-b189.jar`
-* `thingworx-platform-common-9.2.3-b189.jar`
-* `joda-time-2.9.jar`
-* `slf4j-api-1.7.12.jar`
-* `logback-core-1.0.13.jar`
-* `logback-classic-1.0.13.jar`
+### ThingWorx SDK
 
-The folder layout can be modified by editing the project.ext section in the build.gradle file. The
+The ThingWorx SDK is proprietary to PTC and is **not** included in this repository. After cloning, you must
+manually copy the following files into `lib/twxSdk`. They can be found in the ThingWorx installation
+directory, in `/apache-tomcat/webapps/Thingworx/WEB-INF/lib`:
+
+* `thingworx-common-<version>.jar`
+* `thingworx-platform-common-<version>.jar`
+
+The build is known to work with the 9.5 and 10.1 SDKs. The extension is compiled for Java 11, so it
+still loads on older ThingWorx versions. Other libraries that ThingWorx already provides (HttpClient,
+commons-io, org.json, slf4j, logback) are downloaded from Maven Central and are not bundled with the extension.
+
+The GitLab pipeline downloads the SDK from the project's generic package registry instead, from the package
+`thingworx-sdk` with the version set in `TWX_SDK_VERSION` in `.gitlab-ci.yml`. To use a different SDK version,
+upload the jars once with a personal access token that has the `api` scope, then update `TWX_SDK_VERSION`:
+
+```bash
+for jar in thingworx-common thingworx-platform-common; do
+  curl --fail --header "PRIVATE-TOKEN: <token>" --upload-file "lib/twxSdk/${jar}-9.5.0-b143.jar" \
+    "https://gitlab.com/api/v4/projects/43130121/packages/generic/thingworx-sdk/9.5.0-b143/${jar}-9.5.0-b143.jar"
+done
+```
+
+To share one SDK package between several extensions, upload it to a single project, set `TWX_SDK_PROJECT_ID`
+to that project's id, and allow this project's CI job token to access it.
+
+### Build
+
+The folder layout can be modified by editing the `ext` section in the build.gradle file. The
 default layout is as following:
 
 ```gradle
-	uiDir = "/ui" // if there are any widgets
-	localJarDir = "/lib/local" // if you have any local jars that need to be included in the project, add them here
-	srcDir = "${baseDir}/src/main" // where are the sources located
-	buildDir = "${baseDir}/build" // where is the build saved
-	configDir = "${baseDir}/configfiles" // folder location of the metadata.xml file
-	entitiesDir = "${baseDir}/configfiles/Entities" // folder location Entities that are included with the extension
-	zipDir = "${baseDir}/zip" // where to store the generated zip 
-	thingworxSdkDir = "${baseDir}/lib/common" // where the thingworx sdk is located
+	uiDir = "$baseDir/ui" // UI widgets folder
+	localJarDir = "$baseDir/lib/local" // Local jars folder, packaged with the extension
+	srcDir = "$baseDir/src/main" // Source directory
+	configDir = "$baseDir/configfiles" // Config files folder, including any Entities
+	zipDir = "$baseDir/zip" // Output zip folder
+	thingworxSdkDir = "$baseDir/lib/twxSdk" // Thingworx SDK folder
 ```
+
+The version of the extension is read from `packageVersion` in `configfiles/metadata.xml`.
 
 The thingworx related gradle tasks are:
 
-* `packageExtension`: creates in the zipDir an zip archive with the extension
-* `upload`: uploads the extension to the specified TWX server.
+* `packageExtension`: creates `zip/ContentLoaderExtended_Extension-v<version>.zip` with the extension
+* `upload`: uploads the extension to the TWX server set in `thingworxServerRoot`
+* `incrementExtensionVersion`: increments the patch version in `configfiles/metadata.xml`
+
+### Releasing
+
+The GitLab pipeline builds the extension on every push. To publish a release, push a tag named
+`release/<version>`, where `<version>` matches `packageVersion` in `configfiles/metadata.xml`
+(for example `release/2.2.0`). The pipeline then uploads the zip to the package registry and creates a
+GitLab release.
 
 
 ## Unit testing framework

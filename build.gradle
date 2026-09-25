@@ -1,220 +1,246 @@
-import groovyx.net.http.HTTPBuilder
+import groovy.xml.XmlParser
+import groovy.xml.XmlUtil
+import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.mime.MultipartEntityBuilder
-
-import static groovyx.net.http.Method.POST
-
-group 'com.iqnox.twx.extensions'
-version '1.0-SNAPSHOT'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'java'
-apply plugin: 'wrapper'
-defaultTasks 'clean', 'packageExtension'
+import org.apache.http.impl.client.HttpClients
 
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.apache.httpcomponents:httpmime:4.5.2'
-        classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+        classpath 'org.apache.httpcomponents:httpmime:4.5.14'
     }
 }
 
-java {
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+plugins {
+    id 'java'
 }
 
-// set the properties accordingly
-project.ext {
-    incrementVersionNumber = true
+group = 'com.iqnox.twx.extensions'
+defaultTasks 'clean', 'packageExtension'
+
+// Keep the generated extension loadable on older ThingWorx versions, even when Gradle itself runs on a newer JDK.
+tasks.withType(JavaCompile).configureEach {
+    options.release = 11
+}
+
+// Define project properties in a structured way
+ext {
     extensionJar = "ContentLoaderExtended_Extension.jar"
     baseDir = projectDir
-    common = 'common'
-    uiDir = "${baseDir}/ui" // if there are any widgets
-    localJarDir = "${baseDir}/lib/local" // if you have any jars add them here
-    srcDir = "${baseDir}/src/main" // where are the sources located
-    buildDir = "${baseDir}/build" // where is the build saved
-    configDir = "${baseDir}/configfiles" // folder location of the metadata.xml file
-    entitiesDir = "${baseDir}/configfiles/Entities" // folder additional Entities file that you want to be included in the extension
-    zipDir = "${baseDir}/zip" // where to store the generated zip
-    thingworxSdkDir = "${baseDir}/lib/common" // where the thingworx sdk is located
-    packageVendor = "IQNOX" // MANIFEST.MF information
-    packageName = "ContentLoaderExtension" // MANIFEST.MF information
-    packageTitle = "ContentLoaderExtension" // MANIFEST.MF information
-    packageVersion = version
-    thingworxServerRoot = "http://Administrator:Administrator12345@localhost:8015" // When calling the Upload task, what is the target server
+    uiDir = "$baseDir/ui" // UI widgets folder
+    localJarDir = "$baseDir/lib/local" // Local jars folder, packaged with the extension
+    srcDir = "$baseDir/src/main" // Source directory
+    configDir = "$baseDir/configfiles" // Config files folder, including any Entities
+    zipDir = "$baseDir/zip" // Output zip folder
+    thingworxSdkDir = "$baseDir/lib/twxSdk" // Thingworx SDK folder
+    metadataXmlFile = "$configDir/metadata.xml"
+    packageVendor = "IQNOX"
+    packageName = "ContentLoaderExtension"
+    packageTitle = "ContentLoaderExtension"
+    // packageVersion will be read from metadata XML at initialization
+    packageVersion = null
+    thingworxServerRoot = "http://Administrator:Administrator12345@localhost:8015"
+}
+
+// Utility functions for XML metadata manipulation
+def readMetadataXml() {
+    File xmlFile = file(metadataXmlFile)
+    if (!xmlFile.exists()) {
+        throw new GradleException("Metadata XML file not found: ${xmlFile.absolutePath}")
+    }
+    def parser = new XmlParser(false, true)
+    return parser.parse(xmlFile)
+}
+
+def writeMetadataXml(metadata, path) {
+    File xmlFile = file(path)
+    xmlFile.withPrintWriter { pw ->
+        pw.write(XmlUtil.serialize(metadata))
+    }
+}
+
+// Initialize metadata and version
+ext.metadataXmlContents = readMetadataXml()
+packageVersion = metadataXmlContents.ExtensionPackages.ExtensionPackage.@packageVersion[0]
+version = packageVersion
+
+// Exclude dependencies supplied by ThingWorx from the extension package.
+// Bundling any of these can make the extension fail to import or run.
+def shouldExcludeFile(String fileName) {
+    def exclusions = [
+            "commons-codec", "commons-io", "commons-lang", "commons-logging",
+            "netty", "log4j", "logback", "httpclient", "httpcore", "httpmime",
+            "slf4j", "thingworx", "json-"
+    ]
+    return exclusions.any { fileName.startsWith(it) }
 }
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs project.ext.thingworxSdkDir
-    }
-    flatDir {
-        dirs project.ext.localJarDir
-    }
 }
 
 sourceSets {
     main {
         java {
-            srcDir project.ext.srcDir
+            srcDir srcDir
         }
     }
 }
 
 clean.doFirst {
-    delete project.ext.zipDir
+    delete zipDir
 }
 
 configurations {
     packageDependencies
+    implementation {
+        extendsFrom packageDependencies
+    }
 }
-configurations.implementation.extendsFrom(configurations.packageDependencies)
 
 dependencies {
-    implementation'junit:junit:4.12'
-    // compile dependencies are dependencies that you know that already exist in Tomcat
-    packageDependencies 'commons-io:commons-io:2.15.1'
-    packageDependencies 'org.apache.httpcomponents:httpclient:4.5.3'
-    compileOnly 'org.apache.httpcomponents:httpmime:4.5.6'
-    compileOnly fileTree(dir: project.ext.thingworxSdkDir,include: ['*.jar'])
-    // we depend on the thingworx sdk that should be in the thingorxSdkDir
-    // package dependencies are external dependences that are also written in the metadata.xml under JarResoruces
-    // include all local jar, and other jars using manven
-    packageDependencies fileTree(dir: project.ext.localJarDir, include: ['**/*.jar'])
+    testImplementation 'junit:junit:4.13.2'
+    // The ThingWorx SDK jars, see the README for where to get them
+    compileOnly fileTree(dir: thingworxSdkDir, include: ['*.jar'])
+    // Jars in lib/local are bundled with the extension
+    packageDependencies fileTree(dir: localJarDir, include: ['*.jar'])
+
+    // Libraries that ThingWorx already provides at runtime. Only needed for compiling.
+    compileOnly 'commons-io:commons-io:2.16.1'
+    compileOnly 'org.apache.httpcomponents:httpclient:4.5.14'
+    compileOnly 'org.apache.httpcomponents:httpmime:4.5.14'
+    compileOnly 'org.json:json:20240303'
+    compileOnly 'org.slf4j:slf4j-api:1.7.36'
+    compileOnly 'ch.qos.logback:logback-classic:1.2.13'
+
+    // Add all dependencies that must be bundled with the extension using the packageDependencies configuration.
 }
 
 jar {
-    archiveFileName = project.ext.extensionJar
+    archiveFileName = extensionJar
     manifest {
-        attributes(["Built-By"  : project.ext.packageVendor,
-                    "Build-Date": new Date().format("yyyy-MM-dd HH:mm:ss")])
-        attributes(["Package-Title"  : project.ext.packageTitle,
-                    "Package-Version": project.ext.packageVersion,
-                    "Package-Vendor" : project.ext.packageVendor], project.ext.packageName
+        attributes(
+                "Built-By": packageVendor,
+                "Build-Date": new Date().format("yyyy-MM-dd HH:mm:ss"),
+                "Package-Title": packageTitle,
+                "Package-Version": packageVersion,
+                "Package-Vendor": packageVendor
         )
     }
 }
 
+// Function to update metadata XML with jar dependencies
 def addDependenciesInMetadata() {
-    def file = "${buildDir}/zip/metadata.xml"
-    def parser = new groovy.util.XmlParser(false, true)
-    def xml = parser.parse(file)
-    xml.ExtensionPackages.ExtensionPackage.JarResources[0]?.appendNode(
-            "FileResource",
-            [type: "JAR", file: project.ext.extensionJar]
-    )
-    for (File f : configurations.packageDependencies) {
-        if (f.getName().startsWith("commons-codec") ||
-                f.getName().startsWith("commons-io") ||
-                f.getName().startsWith("commons-logging") ||
-                f.getName().startsWith("netty") ||
-                f.getName().startsWith("log4j") ||
-                f.getName().startsWith("httpclient") ||
-                f.getName().startsWith("httpcore") ||
-                f.getName().startsWith("slf4j")
-        ) {
-            continue
+    def metadata = metadataXmlContents
+    def jarResources = metadata.ExtensionPackages.ExtensionPackage.JarResources[0]
+    // Append extension jar reference
+    jarResources.appendNode("FileResource", [type: "JAR", file: extensionJar])
+
+    configurations.packageDependencies.files.each { File f ->
+        if (!shouldExcludeFile(f.name)) {
+            jarResources.appendNode("FileResource", [type: "JAR", file: f.name])
         }
-        xml.ExtensionPackages.ExtensionPackage.JarResources[0]?.appendNode(
-                "FileResource",
-                [type: "JAR", file: f.getName()]
-        )
     }
-    PrintWriter pw = new PrintWriter(new File(file))
-    pw.write(groovy.xml.XmlUtil.serialize(xml))
-    pw.close()
+
+    writeMetadataXml(metadata, "${project.layout.buildDirectory.get()}/zip/metadata.xml")
 }
 
-task prepPackage(dependsOn: jar) {
-    if (project.ext.incrementVersionNumber)
-        increaseVersionNumber()
+tasks.register('prepPackage') {
+    dependsOn jar
     doLast {
-        delete project.ext.zipDir
-        delete "${buildDir}/zip/"
+        delete zipDir
+        delete "${layout.buildDirectory.get()}/zip/"
 
-        // add here all the jars from the packageDependencies configuration
+        // Copy the jars from packageDependencies
         copy {
-            from configurations.packageDependencies
-            into "${buildDir}/zip/lib/common/"
+            from configurations.packageDependencies {
+                exclude { details -> shouldExcludeFile(details.file.name) }
+            }
+            into "${layout.buildDirectory.get()}/zip/lib/common/"
         }
-        // add the configuration
+        // Copy the configuration
         copy {
-            from "${project.ext.configDir}"
-            into "${buildDir}/zip/"
+            from configDir
+            into "${layout.buildDirectory.get()}/zip/"
         }
+
         addDependenciesInMetadata()
-        // add the extension jar itself
+        // Copy the extension jar itself
         copy {
-            from "${buildDir}/libs/${project.ext.extensionJar}"
-            into "${buildDir}/zip/lib/common/"
+            from "${layout.buildDirectory.get()}/libs/${extensionJar}"
+            into "${layout.buildDirectory.get()}/zip/lib/common/"
         }
-        // add the ui files
+        // Copy the UI files
         copy {
             from uiDir
-            into "${buildDir}/zip/ui/"
-        }
-        copy {
-            from entitiesDir
-            into "${buildDir}/zip/Entities/"
+            into "${layout.buildDirectory.get()}/zip/ui/"
         }
     }
 }
 
-task packageExtension(type: Zip, dependsOn: prepPackage) {
-    archiveFileName = "${project.name}.zip"
-    destinationDirectory = new File(project.ext.zipDir)
-    from "${buildDir}/zip/"
+tasks.register('packageExtension', Zip) {
+    dependsOn tasks.prepPackage
+    archiveFileName = "${project.name}-v${version}.zip"
+    destinationDirectory = file(zipDir)
+    from "${layout.buildDirectory.get()}/zip/"
 }
 
-
+// Explicitly update the version only when requested. This must not happen
+// during Gradle's configuration phase, where even `gradlew tasks` could
+// otherwise modify metadata.xml.
 def increaseVersionNumber() {
-    def file = "${configDir}/metadata.xml"
-    def parser = new groovy.util.XmlParser(false, true)
-    def xml = parser.parse(file)
-
-    def currentVersion = xml.ExtensionPackages.ExtensionPackage.@packageVersion[0]
-
+    def currentVersion = version.toString()
     def versionComponents = currentVersion.split('\\.')
+    def lastIndex = versionComponents.length - 1
+    versionComponents[lastIndex] = (versionComponents[lastIndex].toInteger() + 1).toString()
+    def newVersion = versionComponents.join('.')
 
-    def minorVersion = ++Integer.parseInt(versionComponents[versionComponents.length - 1])
+    // Update metadata XML
+    metadataXmlContents.ExtensionPackages.ExtensionPackage.@packageVersion = newVersion
+    writeMetadataXml(metadataXmlContents, metadataXmlFile)
 
-    versionComponents[versionComponents.length - 1] = String.valueOf(minorVersion)
-
-    xml.ExtensionPackages.ExtensionPackage.@packageVersion = String.join('.', versionComponents)
-    //  xml.ExtensionPackages.ExtensionPackage.get(0).attributes().put('packageVersion', String.join(',', versionComponents));
-
-    println 'Updated to version ' + String.join('.', versionComponents)
-    println xml.ExtensionPackages.ExtensionPackage.@packageVersion[0]
-
-    PrintWriter pw = new PrintWriter(new File(file))
-    pw.write(groovy.xml.XmlUtil.serialize(xml))
-    pw.close()
+    logger.lifecycle("Updated version from ${currentVersion} to ${newVersion}")
+    version = newVersion
 }
 
-task upload(dependsOn: packageExtension) {
+tasks.register('incrementExtensionVersion') {
+    group = 'build'
+    description = 'Increments the patch version in configfiles/metadata.xml.'
     doLast {
-        def http = new HTTPBuilder("${project.ext.thingworxServerRoot}/Thingworx/")
+        increaseVersionNumber()
+    }
+}
 
-        def extZip = file("${project.ext.zipDir}/${project.name}.zip")
+// Task to upload the packaged extension to Thingworx
+tasks.register('upload') {
+    dependsOn tasks.packageExtension
+    doLast {
+        def extZip = file("${zipDir}/${project.name}-v${version}.zip")
+        def uploadUri = new URI("${thingworxServerRoot}/Thingworx/ExtensionPackageUploader?purpose=import")
+        def request = new HttpPost(uploadUri)
+        request.setHeader('X-XSRF-TOKEN', 'TWX-XSRF-TOKEN-VALUE')
+        if (uploadUri.userInfo) {
+            def credentials = Base64.encoder.encodeToString(uploadUri.userInfo.bytes)
+            request.setHeader('Authorization', "Basic ${credentials}")
+        }
 
-        http.request(POST) { req ->
-            uri.path = 'ExtensionPackageUploader'
-            uri.query = ['purpose': 'import']
-            headers."X-XSRF-TOKEN" = "TWX-XSRF-TOKEN-VALUE"
-            requestContentType = 'multipart/form-data'
-            MultipartEntityBuilder entity = MultipartEntityBuilder.create().setLaxMode()
-            entity.addBinaryBody('file', extZip)
-            req.setEntity(entity.build())
-            response.success = { resp ->
-                println("Upload successful!")
-            }
-            response.failure = { resp ->
-                println(resp.statusLine)
-                throw new StopExecutionException("Thingworx upload failed! See server response above")
+        def entity = MultipartEntityBuilder.create().setLaxMode()
+        entity.addBinaryBody('file', extZip)
+        request.setEntity(entity.build())
+
+        HttpClients.createDefault().withCloseable { client ->
+            client.execute(request).withCloseable { response ->
+                if (response.statusLine.statusCode in 200..<300) {
+                    logger.lifecycle('Upload successful!')
+                } else if (response.statusLine.statusCode == 406) {
+                    logger.warn('Upload returned 406: Please restart ThingWorx for the changes to apply.')
+                } else {
+                    def responseBody = response.entity?.content?.text
+                    logger.error("Upload failed: ${response.statusLine}, response: ${responseBody}")
+                    throw new GradleException("ThingWorx upload failed, ${response.statusLine}! Response body: ${responseBody}. See server response above")
+                }
             }
         }
     }
