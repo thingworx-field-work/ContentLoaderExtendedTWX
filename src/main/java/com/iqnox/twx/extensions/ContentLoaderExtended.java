@@ -25,7 +25,8 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.net.ssl.SSLContext;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.http.ConnectionReuseStrategy;
@@ -57,7 +58,15 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+import org.json.JSONArray;
 import org.slf4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ContentLoaderExtended extends Resource {
 
@@ -120,6 +129,67 @@ public class ContentLoaderExtended extends Resource {
       trustStorePassword,
       keepAlivePool
     );
+  }
+
+  @ThingworxServiceDefinition(name = "ExecuteHttpRequests", description = "Wrapper for 'ExecuteHttpRequest' to execute multiple HTTP requests simultaneously", category = "Request")
+  @ThingworxServiceResult(name = "result", description = "Array of response objects in 'array' property", baseType = "JSON")
+  public JSONObject ExecuteHttpRequests(
+    @ThingworxServiceParameter(name = "array", description = "Array of request/parameter objects", baseType = "JSON") JSONObject requestsObj
+  ) throws Exception {
+    // Prepare JSON output
+    JSONArray requests = requestsObj.getJSONArray("array");
+    JSONObject out = JSONUtilities.createJSON();
+    JSONArray responses = JSONUtilities.createJSONArray();
+    out.put("array", responses);
+
+    // Create a callable request list
+    List<Callable<JSONObject>> taskList = new ArrayList<>();
+    for (int i = 0; i < requests.length(); i++) {
+      JSONObject request = requests.getJSONObject(i);
+      taskList.add(() -> {
+        try {
+          return ExecuteHttpRequest(
+            request.optString("url"),
+            request.optString("method"),
+            request.optString("content"),
+            request.optString("contentType"),
+            request.optString("username"),
+            request.optString("password"),
+            request.optJSONObject("headers"),
+            request.optBoolean("ignoreSSLErrors"),
+            request.optBoolean("withCookies"),
+            request.optBoolean("withResponseStatus"),
+            request.optBoolean("withResponseHeaders"),
+            request.optDouble("timeout"),
+            request.optBoolean("useNTLM"),
+            request.optString("workstation"),
+            request.optString("domain"),
+            request.optBoolean("useProxy"),
+            request.optString("proxyHost"),
+            request.optInt("proxyPort"),
+            request.optString("proxyScheme"),
+            request.optString("keyStorePath"),
+            request.optString("keyStorePassword"),
+            request.optString("trustStorePath"),
+            request.optString("trustStorePassword"),
+            request.optString("keepAlivePool", null)
+          );
+        } catch (Exception e) {
+          return JSONUtilities.createJSON().put("error", String.valueOf(e));
+        }
+      });
+    }
+
+    // Execute all requests
+    ExecutorService executor = Executors.newCachedThreadPool();
+    List<Future<JSONObject>> futureResponses = executor.invokeAll(taskList);
+
+    // Add response objects to JSON output
+    for (Future<JSONObject> futureResponse : futureResponses) {
+      responses.put(futureResponse.get());
+    }
+
+    return out;
   }
 
   @ThingworxServiceDefinition(name = "ExecuteHttpMultipartRequest", description = "Multipart data upload from Thingworx to and external target via HTTP POST with multiple files", category = "Request")
@@ -221,7 +291,7 @@ public class ContentLoaderExtended extends Resource {
     );
   }
 
-  private HashMap<String, CloseableHttpClient> reusableClients = new HashMap<>();
+  private final Map<String, CloseableHttpClient> reusableClients = new ConcurrentHashMap<>();
 
   private JSONObject executeRequest(
     String url,

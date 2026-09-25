@@ -82,6 +82,42 @@ let result = Resources.ContentLoaderExtended.ExecuteHttpRequest(
 );
 ```
 
+- Executing multiple requests in parallel
+
+```javascript
+// Execute multiple requests simultaneously by executing in a separate thread for each request.
+// This approach is much faster than calling multiple 'ExecuteHttpRequest()' in a row,
+// since each request blocks the execution of the script.
+let result = Resources.ContentLoaderExtended.ExecuteHttpRequests(
+    {
+      array: [
+        {
+          url: url1,
+          method: "GET"
+        },
+        {
+          url: url2,
+          method: "GET"
+        },
+        {
+          url: "invalid ⚠️",
+          method: "GET"
+        }
+      ]
+    }
+);
+
+// Array of all results (in this example there are three result objects)
+let allResults = result.array;
+
+// Array of all (fulfilled) responses. Each object's structure is exactly the same as that of 'ExecuteHttpRequest'.
+let responses = result.array.filter(e => !e.error);
+
+// In case of an error ('ExecuteHttpRequest' would throw an error), an object with the property "error" of
+// type "string" is returned, which describes the error. In this example, they are simply logged.
+result.array.filter(e => e.error).forEach(e => logger.error(e.error));
+```
+
 - Sending a Multipart request with multiple files in the body:
 
 ```javascript
@@ -203,7 +239,30 @@ The testing framework has the following characteristics:
 
 4. **Save** all your modifications and **execute** `RunAllTests`. All tests should pass.
 
-# Disclaimer
 
-This Extension is provided as-is and without warranty or support. It is not part of the PTC product
-suite. This project is licensed under the terms of the MIT license
+# Disclaimer
+By downloading this software, the user acknowledges that it is unsupported, not reviewed for security purposes, and that the user assumes all risk for running it.
+
+Users accept all risk whatsoever regarding the security of the code they download.
+
+This software is not an official PTC product and is not officially supported by PTC.
+
+PTC is not responsible for any maintenance for this software.
+
+PTC will not accept technical support cases logged related to this Software.
+
+This source code is offered freely and AS IS without any warranty.
+
+The author of this code cannot be held accountable for the well-functioning of it.
+
+The author shared the code that worked at a specific moment in time using specific versions of PTC products at that time, without the intention to make the code compliant with past, current or future versions of those PTC products.
+
+The author has not committed to maintain this code and he may not be bound to maintain or fix it.
+
+
+# License
+I accept the MIT License (https://opensource.org/licenses/MIT) and agree that any software downloaded/utilized will be in compliance with that Agreement. However, despite anything to the contrary in the License Agreement, I agree as follows:
+
+I acknowledge that I am not entitled to support assistance with respect to the software, and PTC will have no obligation to maintain the software or provide bug fixes or security patches or new releases.
+
+The software is provided “As Is” and with no warranty, indemnitees or guarantees whatsoever, and PTC will have no liability whatsoever with respect to the software, including with respect to any intellectual property infringement claims or security incidents or data loss.
