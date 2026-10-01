@@ -151,11 +151,13 @@ let result = Resources.ContentLoaderExtended.ExecuteHttpMultipartRequest(
 
 The build uses the Gradle wrapper (Gradle 9) and needs a JDK 17 or newer to run.
 
-### ThingWorx SDK
+### ThingWorx library dependencies
 
-The ThingWorx SDK is proprietary to PTC and is **not** included in this repository. After cloning, you must
-manually copy the following files into `lib/twxSdk`. They can be found in the ThingWorx installation
-directory, in `/apache-tomcat/webapps/Thingworx/WEB-INF/lib`:
+
+This repository depends on two proprietary ThingWorx libraries that are **not** included in this repository. After cloning, you must
+manually copy the following files into `lib/twxSdk`. They can be found either in the ThingWorx installation
+directory, in `apache-tomcat/webapps/Thingworx/WEB-INF/lib` or in the manual ThingWorx installation archive `..._ThingWorx-Platform-Postgres-<version>.zip`
+(extract the the Thingworx.war file from the archive and look in `Thingworx/WEB-INF/lib`):
 
 * `thingworx-common-<version>.jar`
 * `thingworx-platform-common-<version>.jar`
