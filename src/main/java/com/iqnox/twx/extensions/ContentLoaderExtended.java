@@ -15,21 +15,48 @@ import com.thingworx.resources.Resource;
 import com.thingworx.things.repository.FileRepositoryThing;
 import com.thingworx.types.InfoTable;
 import com.thingworx.types.collections.ValueCollection;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.net.ssl.SSLContext;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.NTCredentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.config.RequestConfig.Builder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.config.SocketConfig;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.slf4j.Logger;
@@ -70,7 +97,8 @@ public class ContentLoaderExtended extends Resource {
     @ThingworxServiceParameter(name = "keyStorePath", baseType = "STRING", description = "Absolute path to the client SSL keystore") String keyStorePath,
     @ThingworxServiceParameter(name = "keyStorePassword", description = "SSL Keystore Password", baseType = "STRING") String keyStorePassword,
     @ThingworxServiceParameter(name = "trustStorePath", description = "Absolute path to the SSL client truststore", baseType = "STRING") String trustStorePath,
-    @ThingworxServiceParameter(name = "trustStorePassword", description = "SSL Truststore Password", baseType = "STRING") String trustStorePassword
+    @ThingworxServiceParameter(name = "trustStorePassword", description = "SSL Truststore Password", baseType = "STRING") String trustStorePassword,
+    @ThingworxServiceParameter(name = "keepAlivePool", description = "An identifier for a previous request that should be reused for this one. Note that some of the arguments will be ignored when using this, if a previous connection with this name is available.", baseType = "STRING") String keepAlivePool
   ) throws Exception {
     if (StringUtilities.isNotBlank(content) && StringUtilities.isBlank(contentType)) {
       contentType = "text/plain";
@@ -98,7 +126,8 @@ public class ContentLoaderExtended extends Resource {
       keyStorePath,
       keyStorePassword,
       trustStorePath,
-      trustStorePassword
+      trustStorePassword,
+      keepAlivePool
     );
   }
 
@@ -142,7 +171,8 @@ public class ContentLoaderExtended extends Resource {
             request.optString("keyStorePath"),
             request.optString("keyStorePassword"),
             request.optString("trustStorePath"),
-            request.optString("trustStorePassword")
+            request.optString("trustStorePassword"),
+            request.optString("keepAlivePool", null)
           );
         } catch (Exception e) {
           return JSONUtilities.createJSON().put("error", String.valueOf(e));
@@ -191,7 +221,8 @@ public class ContentLoaderExtended extends Resource {
     @ThingworxServiceParameter(name = "keyStorePath", baseType = "STRING", description = "Absolute path to the client SSL keystore") String keyStorePath,
     @ThingworxServiceParameter(name = "keyStorePassword", description = "SSL Keystore Password", baseType = "STRING") String keyStorePassword,
     @ThingworxServiceParameter(name = "trustStorePath", description = "Absolute path to the SSL client truststore", baseType = "STRING") String trustStorePath,
-    @ThingworxServiceParameter(name = "trustStorePassword", description = "SSL Truststore Password", baseType = "STRING") String trustStorePassword
+    @ThingworxServiceParameter(name = "trustStorePassword", description = "SSL Truststore Password", baseType = "STRING") String trustStorePassword,
+    @ThingworxServiceParameter(name = "keepAlivePool", description = "An identifier for a previous request that should be reused for this one. Note that some of the arguments will be ignored when using this, if a previous connection with this name is available.", baseType = "STRING") String keepAlivePool
   ) throws Exception {
     if (StringUtilities.isNullOrEmpty(url)) {
       throw new InvalidRequestException("URL parameter cannot be blank", RESTAPIConstants.StatusCode.STATUS_BAD_REQUEST);
@@ -255,9 +286,12 @@ public class ContentLoaderExtended extends Resource {
       keyStorePath,
       keyStorePassword,
       trustStorePath,
-      trustStorePassword
+      trustStorePassword,
+      keepAlivePool
     );
   }
+
+  private final Map<String, CloseableHttpClient> reusableClients = new ConcurrentHashMap<>();
 
   private JSONObject executeRequest(
     String url,
@@ -281,7 +315,8 @@ public class ContentLoaderExtended extends Resource {
     String keyStorePath,
     String keyStorePassword,
     String trustStorePath,
-    String trustStorePassword
+    String trustStorePassword,
+    String keepAlivePool
   ) throws Exception {
     if (StringUtilities.isNullOrEmpty(url)) {
       throw new InvalidRequestException("URL parameter cannot be blank", RESTAPIConstants.StatusCode.STATUS_BAD_REQUEST);
@@ -289,24 +324,37 @@ public class ContentLoaderExtended extends Resource {
     if (StringUtilities.isNullOrEmpty(method)) {
       throw new InvalidRequestException("Method parameter cannot be blank", RESTAPIConstants.StatusCode.STATUS_BAD_REQUEST);
     }
-    SSLContext sslContext = HttpUtilities.createSslContext(keyStorePath, keyStorePassword, trustStorePath, trustStorePassword, ignoreSSLErrors);
 
-    try (
-      CloseableHttpClient client = HttpUtilities.createHttpClient(
-        username,
-        StringUtilities.stringToByteArray(password),
-        ignoreSSLErrors,
-        timeout,
-        useNTLM,
-        workstation,
-        domain,
-        useProxy,
-        proxyHost,
-        proxyPort,
-        proxyScheme,
-        sslContext
-      )
-    ) {
+    CloseableHttpClient client = null;
+    if (keepAlivePool != null) {
+      client = reusableClients.get(keepAlivePool);
+    }
+
+    if (client == null) {
+      SSLContext sslContext = HttpUtilities.createSslContext(keyStorePath, keyStorePassword, trustStorePath, trustStorePassword, ignoreSSLErrors);
+
+      client = createHttpClient(
+          username,
+          StringUtilities.stringToByteArray(password),
+          ignoreSSLErrors,
+          timeout,
+          useNTLM,
+          workstation,
+          domain,
+          useProxy,
+          proxyHost,
+          proxyPort,
+          proxyScheme,
+          sslContext
+      );
+
+      // If a keep alive identifier is used, save this client to reuse it for future requests
+      if (keepAlivePool != null) {
+        reusableClients.put(keepAlivePool, client);
+      }
+    }
+
+    try {
       RequestBuilder requestBuilder = RequestBuilder.create(method).setUri(url);
 
       if (headers != null) {
@@ -321,11 +369,15 @@ public class ContentLoaderExtended extends Resource {
       HttpClientContext context = HttpUtilities.createClientContext();
       HttpUtilities.enablePremptiveAuthentication(context, url);
 
-      try (CloseableHttpResponse response = client.execute(requestBuilder.build(), context)) {
+      CloseableHttpResponse response = client.execute(requestBuilder.build(), context);
+
+      try {
         JSONObject json = JSONUtilities.createJSON();
 
+        final HttpEntity responseEntity = response.getEntity();
+
         if (response.getStatusLine().getStatusCode() != StatusCode.STATUS_NO_CONTENT.httpCode()) {
-          json.put("response", StringUtilities.readFromStream(response.getEntity().getContent(), true));
+          json.put("response", StringUtilities.readFromStream(responseEntity.getContent(), true));
         }
 
         if (Boolean.TRUE.equals(withCookies)) {
@@ -339,6 +391,15 @@ public class ContentLoaderExtended extends Resource {
         }
 
         return json;
+      }
+      finally {
+        EntityUtils.consume(response.getEntity());
+      }
+    }
+    finally {
+      // If keep alive is not used, close the client
+      if (keepAlivePool == null) {
+        client.close();
       }
     }
   }
@@ -383,4 +444,135 @@ public class ContentLoaderExtended extends Resource {
 
     json.put("responseHeaders", responseHeaderObj);
   }
+
+  private static CloseableHttpClient createHttpClient(String username, byte[] password, Boolean ignoreSSLErrors, Double timeout, Boolean useNTLM, String workstation, String domain, Boolean useProxy, String proxyHost, Integer proxyPort, String proxyScheme, SSLContext sslContext) {
+    try {
+      if (timeout == null) {
+        timeout = 60.0D;
+      }
+
+      if (ignoreSSLErrors == null) {
+        ignoreSSLErrors = false;
+      }
+
+      if (proxyScheme == null) {
+        proxyScheme = "http";
+      }
+
+      int httpTimeout = timeout.intValue() * 1000;
+      HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+      Builder requestConfigBuilder = RequestConfig.custom().setConnectTimeout(httpTimeout).setSocketTimeout(httpTimeout).setCookieSpec("standard");
+      SocketConfig socketConfig = SocketConfig.custom().setSoKeepAlive(true).build();
+      clientBuilder.setDefaultSocketConfig(socketConfig);
+
+      if (useProxy == null) {
+        useProxy = false;
+      }
+
+      clientBuilder.useSystemProperties();
+      if (useProxy && StringUtilities.isNonEmpty(proxyHost) && proxyPort != null) {
+        HttpHost proxy = new HttpHost(proxyHost, proxyPort, proxyScheme);
+        requestConfigBuilder.setProxy(proxy);
+      }
+
+      RequestConfig requestConfig = requestConfigBuilder.build();
+      clientBuilder.setDefaultRequestConfig(requestConfig);
+      clientBuilder.setConnectionReuseStrategy((response, context) -> true);
+
+      if (sslContext == null && ignoreSSLErrors) {
+        sslContext = createSslContext((String)null, (String)null, (String)null, (String)null, ignoreSSLErrors);
+      }
+
+      if (sslContext != null) {
+        SSLConnectionSocketFactory sslConnectionFactory = new SSLConnectionSocketFactory(sslContext, ignoreSSLErrors ? new DefaultHostnameVerifier() : null);
+        clientBuilder.setSSLSocketFactory(sslConnectionFactory);
+      }
+
+      if (username != null && password != null) {
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        if (useNTLM != null && useNTLM) {
+          if (workstation == null) {
+            workstation = "";
+          }
+
+          if (domain == null) {
+            domain = "";
+          }
+
+          credsProvider.setCredentials(
+              AuthScope.ANY, new NTCredentials(username, StringUtilities.byteArrayToString(password), workstation, domain));
+        } else {
+          credsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, StringUtilities.byteArrayToString(password)));
+        }
+
+        clientBuilder.setDefaultCredentialsProvider(credsProvider);
+      }
+
+      CloseableHttpClient client = clientBuilder.build();
+      return client;
+    } catch (Exception var18) {
+      throw new RuntimeException(var18);
+    }
+  }
+
+  private static SSLContext createSslContext(String keyStorePath, String keyStorePassword, String trustStorePath, String trustStorePassword, Boolean ignoreSSLErrors) throws Exception {
+    SSLContextBuilder sslBuilder = createSslContextBuilder(ignoreSSLErrors, keyStorePath, keyStorePassword, trustStorePath, trustStorePassword);
+    return sslBuilder != null ? sslBuilder.build() : null;
+  }
+
+  private static SSLContextBuilder createSslContextBuilder(Boolean ignoreSSLErrors, String keyStorePath, String keyStorePassword, String trustStorePath, String trustStorePassword) throws Exception {
+    SSLContextBuilder sslBuilder = null;
+    KeyStore keystore = getKeyStore(keyStorePath, keyStorePassword);
+    KeyStore truststore = getKeyStore(trustStorePath, trustStorePassword);
+    if (keystore != null || truststore != null || ignoreSSLErrors != null && ignoreSSLErrors) {
+      sslBuilder = new SSLContextBuilder();
+      if (keystore != null) {
+        sslBuilder.loadKeyMaterial(keystore, keyStorePassword.toCharArray());
+      }
+
+      sslBuilder.loadTrustMaterial(truststore, ignoreSSLErrors ? new TrustSelfSignedStrategy() : null);
+    }
+
+    return sslBuilder;
+  }
+
+  private static KeyStore getKeyStore(String keyStorePath, String keyStorePassword) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+    KeyStore keystore = null;
+    if (!StringUtilities.isBlank(keyStorePath)) {
+      File keyStoreFile = new File(keyStorePath);
+      keystore = loadKeyStore(keyStoreFile, keyStorePassword != null ? keyStorePassword.toCharArray() : null);
+    }
+
+    return keystore;
+  }
+
+  private static KeyStore loadKeyStore(File keystoreFile, char[] keystorePwd) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+    if (keystoreFile == null) {
+      return null;
+    } else {
+      KeyStore keystore = KeyStore.getInstance("JKS");
+      FileInputStream is = null;
+
+      try {
+        is = new FileInputStream(keystoreFile);
+        keystore.load(is, keystorePwd);
+      } finally {
+        closeQuietly(is);
+      }
+
+      return keystore;
+    }
+  }
+
+  private static void closeQuietly(InputStream closeable) {
+    try {
+      if (closeable != null) {
+        closeable.close();
+      }
+    } catch (IOException var2) {
+      _logger.error("ERROR Closing InputStream - {}", var2.getMessage());
+    }
+
+  }
+
 }

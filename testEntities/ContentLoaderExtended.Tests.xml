@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Entities build="b195" majorVersion="10" minorVersion="1" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="1" schemaVersion="1210" universal="password"><StyleDefinitions/><Networks/><PersistenceProviderPackages/><QueueProviders/><Mashups/><ScriptFunctionLibraries/><Projects><Project artifactId="" aspect.projectType="Component" dependsOn="{&quot;extensions&quot;:&quot;ContentLoaderExtended_Extension:2.0.84&quot;,&quot;projects&quot;:&quot;&quot;}" description="" documentationContent="" groupId="" homeMashup="" lastModifiedDate="2026-08-14T13:11:38.184+03:00" minPlatformVersion="" name="ContentLoaderExtended.Tests" packageVersion="1.0.0" projectName="ContentLoaderExtended.Tests" publishResult="" state="DRAFT" tags=""><Owner name="Administrator" type="User"/><avatar/><DesignTimePermissions><Create/><Read/><Update/><Delete/><Metadata/></DesignTimePermissions><RunTimePermissions/><VisibilityPermissions><Visibility/></VisibilityPermissions><ConfigurationTableDefinitions/><ConfigurationTables/><ConfigurationChanges><ConfigurationChange changeAction="CREATE" changeReason="header : name : updated&#10;" timestamp="2026-08-11T23:13:14.951+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="header : dependsOn : updated&#10;" timestamp="2026-08-14T13:11:31.558+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="header : dependsOn : updated&#10;" timestamp="2026-08-14T13:11:38.184+03:00" user="Administrator"/></ConfigurationChanges></Project></Projects><Users/><DirectoryServices/><Widgets/><MediaEntities/><Groups/><PersistenceProviders/><ModelTags/><LocalizationTables/><Dashboards/><StyleThemes/><DataShapes><DataShape baseDataShape="" description="" documentationContent="" homeMashup="" lastModifiedDate="2026-08-11T23:15:02.644+03:00" name="ContentLoaderExtended.TestResultData_DS" projectName="ContentLoaderExtended.Tests" tags=""><Owner name="Administrator" type="User"/><avatar/><DesignTimePermissions><Create/><Read/><Update/><Delete/><Metadata/></DesignTimePermissions><RunTimePermissions/><VisibilityPermissions><Visibility/></VisibilityPermissions><ConfigurationTableDefinitions/><ConfigurationTables/><FieldDefinitions><FieldDefinition aspect.isPrimaryKey="false" baseType="STRING" description="" name="comments" ordinal="5"/><FieldDefinition aspect.isPrimaryKey="false" baseType="DATETIME" description="" name="endTimestamp" ordinal="3"/><FieldDefinition aspect.isPrimaryKey="false" baseType="JSON" description="" name="expectedOutput" ordinal="7"/><FieldDefinition aspect.isPrimaryKey="false" baseType="JSON" description="" name="inputParams" ordinal="6"/><FieldDefinition aspect.isPrimaryKey="false" baseType="BOOLEAN" description="" name="passed" ordinal="4"/><FieldDefinition aspect.isPrimaryKey="false" baseType="DATETIME" description="" name="startTimestamp" ordinal="2"/><FieldDefinition aspect.isPrimaryKey="true" baseType="STRING" description="" name="testName" ordinal="1"/></FieldDefinitions><ConfigurationChanges><ConfigurationChange changeAction="CREATE" changeReason="header : name : updated&#10;" timestamp="2026-08-11T23:15:02.644+03:00" user="Administrator"/></ConfigurationChanges></DataShape></DataShapes><Things><Thing description="" documentationContent="" effectiveThingPackage="ConfiguredThing" enabled="true" homeMashup="" identifier="" inheritedValueStream="" lastModifiedDate="2026-09-15T14:32:02.405+03:00" name="ContentLoaderExtended.Tests" projectName="ContentLoaderExtended.Tests" published="false" tags="" thingTemplate="GenericThing" valueStream=""><Owner name="Administrator" type="User"/><avatar/><DesignTimePermissions><Create/><Read/><Update/><Delete/><Metadata/></DesignTimePermissions><RunTimePermissions/><VisibilityPermissions><Visibility/></VisibilityPermissions><ConfigurationTableDefinitions/><ConfigurationTables/><ThingShape><PropertyDefinitions/><ServiceDefinitions><ServiceDefinition aspect.isAsync="false" category="Test" description="General service for executing a test - needs to be overridden" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="BasicAuthGet"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="ExpectedOutput" ordinal="3"/><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="2"/><FieldDefinition aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="PreviousTestResults" ordinal="4"/><FieldDefinition baseType="STRING" description="" name="TestName" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="Test" description="General service for executing a test - needs to be overridden" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="BasicAuthPost"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="ExpectedOutput" ordinal="3"/><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="2"/><FieldDefinition aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="PreviousTestResults" ordinal="4"/><FieldDefinition baseType="STRING" description="" name="TestName" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CreateTestData"><ResultType baseType="JSON" description="" name="result" ordinal="0"/><ParameterDefinitions/></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="DeleteTestData"><ResultType baseType="JSON" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="FormatTestResults"><ResultType baseType="HTML" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="INFOTABLE" description="" name="tests" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="RunAllTests"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions/></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="RunAllTestsFormatResult"><ResultType baseType="HTML" description="" name="result" ordinal="0"/><ParameterDefinitions/></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="Test" description="General service for executing a test - needs to be overridden" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="UnauthDelete"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="ExpectedOutput" ordinal="3"/><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="2"/><FieldDefinition aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="PreviousTestResults" ordinal="4"/><FieldDefinition baseType="STRING" description="" name="TestName" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="Test" description="General service for executing a test - needs to be overridden" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="UnauthGet"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="ExpectedOutput" ordinal="3"/><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="2"/><FieldDefinition aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="PreviousTestResults" ordinal="4"/><FieldDefinition baseType="STRING" description="" name="TestName" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="Test" description="General service for executing a test - needs to be overridden" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="UnauthGetProxy"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="ExpectedOutput" ordinal="3"/><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="2"/><FieldDefinition aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="PreviousTestResults" ordinal="4"/><FieldDefinition baseType="STRING" description="" name="TestName" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="Test" description="General service for executing a test - needs to be overridden" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="UnauthPatch"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="ExpectedOutput" ordinal="3"/><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="2"/><FieldDefinition aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="PreviousTestResults" ordinal="4"/><FieldDefinition baseType="STRING" description="" name="TestName" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="Test" description="General service for executing a test - needs to be overridden" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="UnauthPost"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="ExpectedOutput" ordinal="3"/><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="2"/><FieldDefinition aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="PreviousTestResults" ordinal="4"/><FieldDefinition baseType="STRING" description="" name="TestName" ordinal="1"/></ParameterDefinitions></ServiceDefinition><ServiceDefinition aspect.isAsync="false" category="Test" description="General service for executing a test - needs to be overridden" isAllowOverride="true" isLocalOnly="false" isOpen="false" isPrivate="false" name="UnauthPut"><ResultType aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="result" ordinal="0"/><ParameterDefinitions><FieldDefinition baseType="JSON" description="" name="ExpectedOutput" ordinal="3"/><FieldDefinition baseType="JSON" description="" name="InputParams" ordinal="2"/><FieldDefinition aspect.dataShape="ContentLoaderExtended.TestResultData_DS" baseType="INFOTABLE" description="" name="PreviousTestResults" ordinal="4"/><FieldDefinition baseType="STRING" description="" name="TestName" ordinal="1"/></ParameterDefinitions></ServiceDefinition></ServiceDefinitions><EventDefinitions/><ServiceMappings/><ServiceImplementations><ServiceImplementation description="" handlerName="Script" name="BasicAuthGet"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting test --- " + TestName);
+let startTS = new Date();
+pause(1);
+let testResult;
+let str_Comments;
+//Input data is defined in the CreateTestData Service
+try {
+	let url = InputParams.URLEndpoint;
+    let user = InputParams.User;
+    let password = InputParams.Password;
+	//it record
+	let expectedResponse = ExpectedOutput.Response;
+	// result: JSON
+	let result = Resources["ContentLoaderExtended"].ExecuteHttpRequest({
+		proxyScheme: undefined /* STRING {"defaultValue":"http"} */ ,
+		headers: undefined /* JSON */ ,
+		ignoreSSLErrors: undefined /* BOOLEAN */ ,
+		method: "GET" /* STRING */ ,
+		useNTLM: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		keyStorePassword: undefined /* STRING */ ,
+		withResponseStatus: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		workstation: undefined /* STRING {"defaultValue":""} */ ,
+		useProxy: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		withCookies: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		proxyHost: undefined /* STRING {"defaultValue":""} */ ,
+		url: url /* STRING */ ,
+		content: undefined /* STRING */ ,
+		timeout: undefined /* NUMBER {"defaultValue":60} */ ,
+		keepAlivePool: undefined /* STRING */ ,
+		proxyPort: undefined /* INTEGER {"defaultValue":8080} */ ,
+		trustStorePassword: undefined /* STRING */ ,
+		password: password /* STRING */ ,
+		withResponseHeaders: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		domain: undefined /* STRING {"defaultValue":""} */ ,
+		trustStorePath: undefined /* STRING */ ,
+		contentType: undefined /* STRING */ ,
+		keyStorePath: undefined /* STRING */ ,
+		username: user /* STRING */
+	});
+	testResult = result.response == expectedResponse;
+    if (!testResult) str_Comments = "Received response: "+result.response;
+} catch (err) {
+	testResult = false;
+	str_Comments = "Error: " + err.message + "; Stack: " + err.stack;
+}
+
+//Build the results infotable
+var params = {
+	infoTableName: "InfoTable",
+	dataShapeName: "ContentLoaderExtended.TestResultData_DS"
+};
+
+var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+let endTS = new Date();
+PreviousTestResults.AddRow({
+	testName: TestName,
+	inputParams: InputParams,
+	expectedOutput: ExpectedOutput,
+	startTimestamp: startTS,
+	endTimestamp: endTS,
+	passed: testResult,
+	comments: str_Comments
+});
+result = PreviousTestResults;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="BasicAuthPost"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting test --- " + TestName);
+let startTS = new Date();
+pause(1);
+let testResult;
+let str_Comments;
+//Input data is defined in the CreateTestData Service
+try {
+	let url = InputParams.URLEndpoint;
+    let user = InputParams.User;
+    let password = InputParams.Password;
+	//it record
+	let expectedResponse = ExpectedOutput.Response;
+	// result: JSON
+	let result = Resources["ContentLoaderExtended"].ExecuteHttpRequest({
+		proxyScheme: undefined /* STRING {"defaultValue":"http"} */ ,
+		headers: undefined /* JSON */ ,
+		ignoreSSLErrors: undefined /* BOOLEAN */ ,
+		method: "POST" /* STRING */ ,
+		useNTLM: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		keyStorePassword: undefined /* STRING */ ,
+		withResponseStatus: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		workstation: undefined /* STRING {"defaultValue":""} */ ,
+		useProxy: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		withCookies: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		proxyHost: undefined /* STRING {"defaultValue":""} */ ,
+		url: url /* STRING */ ,
+		content: undefined /* STRING */ ,
+		timeout: undefined /* NUMBER {"defaultValue":60} */ ,
+		keepAlivePool: undefined /* STRING */ ,
+		proxyPort: undefined /* INTEGER {"defaultValue":8080} */ ,
+		trustStorePassword: undefined /* STRING */ ,
+		password: password /* STRING */ ,
+		withResponseHeaders: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		domain: undefined /* STRING {"defaultValue":""} */ ,
+		trustStorePath: undefined /* STRING */ ,
+		contentType: undefined /* STRING */ ,
+		keyStorePath: undefined /* STRING */ ,
+		username: user /* STRING */
+	});
+	testResult = result.response == expectedResponse;
+    if (!testResult) str_Comments = "Received response: "+result.response;
+} catch (err) {
+	testResult = false;
+	str_Comments = "Error: " + err.message + "; Stack: " + err.stack;
+}
+
+//Build the results infotable
+var params = {
+	infoTableName: "InfoTable",
+	dataShapeName: "ContentLoaderExtended.TestResultData_DS"
+};
+
+var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+let endTS = new Date();
+PreviousTestResults.AddRow({
+	testName: TestName,
+	inputParams: InputParams,
+	expectedOutput: ExpectedOutput,
+	startTimestamp: startTS,
+	endTimestamp: endTS,
+	passed: testResult,
+	comments: str_Comments
+});
+result = PreviousTestResults;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="CreateTestData"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/><FieldDefinition baseType="JSON" description="" name="editorSettings" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[//This service should NOT create any data on disk, just provide input data as JSON so it's safe to be called multiple times.
+//Parameters are declared for each test, and sometimes later tests use as value parameters that have been declared for earlier tests; considering this, whenever removing input parameters, make sure they are not used in other tests
+
+//variable to guarantee unicity of entities created throughout these tests
+let shortDate = dateFormat(new Date(), "ddhhmmssSSS");
+let str_HTTP = "http://";
+let str_HTTPS = "https://";
+let str_Domain = "localhost";
+let str_Port = 3001;
+let str_BaseURL = str_Domain+":"+str_Port+"/contentloadertest/";
+
+//The result of this service is a JSON representing the input params required for the ExecuteTest services
+let result = new Object();
+result.tests = new Array();
+
+//test 1
+let test1 = {
+    TestName: "1. Unauthenticated Get",
+    ServiceName: "UnauthGet",
+    InputParams: {
+        URLEndpoint: str_HTTP+str_BaseURL+"TestGetServiceUnauth"
+    },
+    ExpectedOutput: {
+        Response: "{\"MySampleKey\":\"MySampleValue\"}"
+    }
+};
+result.tests.push(test1);
+
+//test 2
+let test2 = {
+    TestName: "2. Unauthenticated POST",
+    ServiceName: "UnauthPost",
+    InputParams: {
+        URLEndpoint: str_HTTP + str_BaseURL + "TestPostServiceUnauth"
+    },
+    ExpectedOutput: {
+        Response: "{\"MySamplePostKey\":\"MySamplePostValue\"}"
+    }
+};
+
+result.tests.push(test2);
+
+//test 3
+let test3 = {
+    TestName: "3. Unauthenticated DELETE",
+    ServiceName: "UnauthDelete",
+    InputParams: {
+        URLEndpoint: str_HTTP + str_BaseURL + "TestDeleteServiceUnauth"
+    },
+    ExpectedOutput: {
+        ResponseCode: 200
+    }
+};
+
+result.tests.push(test3);
+
+//test 4
+let test4 = {
+    TestName: "4. Unauthenticated PUT",
+    ServiceName: "UnauthPut",
+    InputParams: {
+        URLEndpoint: str_HTTP + str_BaseURL + "TestPutServiceUnauth"
+    },
+    ExpectedOutput: {
+        Response: "{\"MySamplePutKey\":\"MySamplePutValue\"}"
+    }
+};
+
+result.tests.push(test4);
+
+//test 5
+let test5 = {
+    TestName: "5. Unauthenticated PATCH",
+    ServiceName: "UnauthPatch",
+    InputParams: {
+        URLEndpoint: str_HTTP + str_BaseURL + "TestPatchServiceUnauth"
+    },
+    ExpectedOutput: {
+        Response: "{\"MySamplePatchKey\":\"MySamplePatchValue\"}"
+    }
+};
+
+result.tests.push(test5);
+
+//test 6
+let test6 = {
+    TestName: "6. Basic Authenticated Get",
+    ServiceName: "BasicAuthGet",
+    InputParams: {
+        URLEndpoint: str_HTTP+str_BaseURL+"TestGetServiceBasicAuth",
+        User:"myUser",
+        Password:"myPassword"
+    },
+    ExpectedOutput: {
+        Response: "{\"MySampleKey\":\"MySampleValue\"}"
+    }
+};
+result.tests.push(test6);
+
+//test 7
+let test7 = {
+    TestName: "7. Basic Authenticated Post",
+    ServiceName: "BasicAuthPost",
+    InputParams: {
+        URLEndpoint: str_HTTP+str_BaseURL+"TestPostServiceBasicAuth",
+        User:"myUser",
+        Password:"myPassword"
+    },
+    ExpectedOutput: {
+        Response: "{\"MySampleKey\":\"MySampleValue\"}"
+    }
+};
+result.tests.push(test7);
+
+// //test 8
+// let test8 = {
+//     TestName: "8. Basic Unauthenticated Get Proxy",
+//     ServiceName: "UnauthGetProxy",
+//     InputParams: {
+//         URLEndpoint: str_HTTP+str_BaseURL+"TestProxyTrigger",
+//         ProxyURL: str_Domain,
+//         ProxyPort: str_Port
+//     },
+//     ExpectedOutput: {
+//         Response: "{\"MySampleKey\":\"MySampleValue\"}"
+//     }
+// };
+// result.tests.push(test8);
+]]></code><editorSettings><json><![CDATA[{"viewState":{"viewState":{"firstPositionDeltaTop":-2,"scrollLeft":0,"firstPosition":{"column":1,"lineNumber":107}},"cursorState":[{"inSelectionMode":true,"selectionStart":{"column":19,"lineNumber":113},"position":{"column":24,"lineNumber":113}}],"contributionsState":{"editor.contrib.wordHighlighter":true,"editor.contrib.folding":{"provider":"indent","lineCount":129,"foldedImports":false}}}}]]></json></editorSettings></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="DeleteTestData"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting to delete test data.");
+
+result = new Object();
+pause(50);
+logger.warn("---Ended deleting test data.");
+]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="FormatTestResults"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[var html = "<HTML><style>table {    border-collapse: collapse;}th, td {    border: 1px solid #ccc;    padding: 4px 8px;}th {    background-color: #f2f2f2;}</style><HEAD><TITLE>Execution Of RunAllTests</TITLE><META http-equiv='Content-Type' content='text/html'></META><META http-equiv='cache-control' content='no-cache, no-store'></META><META http-equiv='expires' content='-1'></META><META http-equiv='pragma' content='no-cache, no-store'></META></HEAD><BODY><BR/><H1>RunAllTests</H1>";
+html += "<TABLE><TR><TH>Test Name</TH><TH>Expected</TH><TH>Inputs</TH><TH>Start Time</TH><TH>End Time</TH><TH>Passed</TH><TH>Comments</TH></TR>";
+
+tests.rows.toArray().forEach(row => {
+	{
+		html += "<TR>";
+		html += "<TD>" + row.testName + "</TD>";
+		html += "<TD>" + row.expectedOutput + "</TD>";
+		html += "<TD>" + row.inputParams + "</TD>";
+		html += "<TD>" + row.startTimestamp + "</TD>";
+		html += "<TD>" + row.endTimestamp + "</TD>";
+		html += "<TD>" + row.passed + "</TD>";
+		html += "<TD>" + ((row.comments == null) ? "" : row.comments) + "</TD>";
+		html += "</TR>";
+	}
+});
+
+html += "</TABLE></BODY></HTML>";
+
+var result = html;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="RunAllTests"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[//1. Initializing the test data. Optional.
+let testData = me.CreateTestData();
+
+//2. Create a variable that will store all the results 
+var prevTestResult= Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+    infoTableName : "InfoTable",
+    dataShapeName : "ContentLoaderExtended.TestResultData_DS"
+});
+
+//3. The CreateTestData contains service Names for each test; we will iterate through those
+
+for (var i = 0; i < testData.tests.length; i++) {  
+    
+   // logger.warn("Starting to execute Test: "+testData.tests[i].ServiceName +"; Test index: "+i);
+    pause(10);
+    prevTestResult=me[testData.tests[i].ServiceName]({PreviousTestResults:prevTestResult,
+                                TestName: testData.tests[i].TestName /* STRING */,
+								InputParams: testData.tests[i].InputParams /* JSON */,
+								ExpectedOutput: testData.tests[i].ExpectedOutput  /* JSON */}); 
+    pause(10);
+}
+//4. delete test data
+pause(50);
+me.DeleteTestData({InputParams:testData});
+result = prevTestResult;
+]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="RunAllTestsFormatResult"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[let result =  me.RunAllTests();
+result =  me.FormatTestResults({
+	tests: result /* INFOTABLE */
+});]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="UnauthDelete"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting test --- " + TestName);
+let startTS = new Date();
+pause(1);
+let testResult;
+let str_Comments;
+//Input data is defined in the CreateTestData Service
+try {
+	let url = InputParams.URLEndpoint;
+	//it record
+	let expectedResponseCode = ExpectedOutput.ResponseCode;
+	// result: JSON
+	let result = Resources["ContentLoaderExtended"].ExecuteHttpRequest({
+		proxyScheme: undefined /* STRING {"defaultValue":"http"} */ ,
+		headers: undefined /* JSON */ ,
+		ignoreSSLErrors: undefined /* BOOLEAN */ ,
+		method: "DELETE" /* STRING */ ,
+		useNTLM: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		keyStorePassword: undefined /* STRING */ ,
+		withResponseStatus: true /* BOOLEAN {"defaultValue":false} */ ,
+		workstation: undefined /* STRING {"defaultValue":""} */ ,
+		useProxy: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		withCookies: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		proxyHost: undefined /* STRING {"defaultValue":""} */ ,
+		url: url /* STRING */ ,
+		content: undefined /* STRING */ ,
+		timeout: undefined /* NUMBER {"defaultValue":60} */ ,
+		keepAlivePool: undefined /* STRING */ ,
+		proxyPort: undefined /* INTEGER {"defaultValue":8080} */ ,
+		trustStorePassword: undefined /* STRING */ ,
+		password: undefined /* STRING */ ,
+		withResponseHeaders: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		domain: undefined /* STRING {"defaultValue":""} */ ,
+		trustStorePath: undefined /* STRING */ ,
+		contentType: undefined /* STRING */ ,
+		keyStorePath: undefined /* STRING */ ,
+		username: undefined /* STRING */
+	});
+	testResult = result.responseStatus.statusCode == expectedResponseCode;
+    if (!testResult) str_Comments = "Received response code: "+result.responseStatus.statusCode;
+} catch (err) {
+	testResult = false;
+	str_Comments = "Error: " + err.message + "; Stack: " + err.stack;
+}
+
+//Build the results infotable
+var params = {
+	infoTableName: "InfoTable",
+	dataShapeName: "ContentLoaderExtended.TestResultData_DS"
+};
+
+var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+let endTS = new Date();
+PreviousTestResults.AddRow({
+	testName: TestName,
+	inputParams: InputParams,
+	expectedOutput: ExpectedOutput,
+	startTimestamp: startTS,
+	endTimestamp: endTS,
+	passed: testResult,
+	comments: str_Comments
+});
+result = PreviousTestResults;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="UnauthGet"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting test --- " + TestName);
+let startTS = new Date();
+pause(1);
+let testResult;
+let str_Comments;
+//Input data is defined in the CreateTestData Service
+try {
+	let url = InputParams.URLEndpoint;
+	//it record
+	let expectedResponse = ExpectedOutput.Response;
+	// result: JSON
+	let result = Resources["ContentLoaderExtended"].ExecuteHttpRequest({
+		proxyScheme: undefined /* STRING {"defaultValue":"http"} */ ,
+		headers: undefined /* JSON */ ,
+		ignoreSSLErrors: undefined /* BOOLEAN */ ,
+		method: "GET" /* STRING */ ,
+		useNTLM: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		keyStorePassword: undefined /* STRING */ ,
+		withResponseStatus: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		workstation: undefined /* STRING {"defaultValue":""} */ ,
+		useProxy: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		withCookies: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		proxyHost: undefined /* STRING {"defaultValue":""} */ ,
+		url: url /* STRING */ ,
+		content: undefined /* STRING */ ,
+		timeout: undefined /* NUMBER {"defaultValue":60} */ ,
+		keepAlivePool: undefined /* STRING */ ,
+		proxyPort: undefined /* INTEGER {"defaultValue":8080} */ ,
+		trustStorePassword: undefined /* STRING */ ,
+		password: undefined /* STRING */ ,
+		withResponseHeaders: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		domain: undefined /* STRING {"defaultValue":""} */ ,
+		trustStorePath: undefined /* STRING */ ,
+		contentType: undefined /* STRING */ ,
+		keyStorePath: undefined /* STRING */ ,
+		username: undefined /* STRING */
+	});
+	testResult = result.response == expectedResponse;
+    if (!testResult) str_Comments = "Received response: "+result.response;
+} catch (err) {
+	testResult = false;
+	str_Comments = "Error: " + err.message + "; Stack: " + err.stack;
+}
+
+//Build the results infotable
+var params = {
+	infoTableName: "InfoTable",
+	dataShapeName: "ContentLoaderExtended.TestResultData_DS"
+};
+
+var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+let endTS = new Date();
+PreviousTestResults.AddRow({
+	testName: TestName,
+	inputParams: InputParams,
+	expectedOutput: ExpectedOutput,
+	startTimestamp: startTS,
+	endTimestamp: endTS,
+	passed: testResult,
+	comments: str_Comments
+});
+result = PreviousTestResults;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="UnauthGetProxy"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting test --- " + TestName);
+let startTS = new Date();
+pause(1);
+let testResult;
+let str_Comments;
+//Input data is defined in the CreateTestData Service
+try {
+	let url = InputParams.URLEndpoint;
+	let ProxyURL = InputParams.ProxyURL;
+    let ProxyPort = InputParams.ProxyPort;
+	let expectedResponse = ExpectedOutput.Response;
+	// result: JSON
+	let result = Resources["ContentLoaderExtended"].ExecuteHttpRequest({
+		proxyScheme: "http" /* STRING {"defaultValue":"http"} */ ,
+		headers: undefined /* JSON */ ,
+		ignoreSSLErrors: undefined /* BOOLEAN */ ,
+		method: "GET" /* STRING */ ,
+		useNTLM: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		keyStorePassword: undefined /* STRING */ ,
+		withResponseStatus: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		workstation: undefined /* STRING {"defaultValue":""} */ ,
+		useProxy: true /* BOOLEAN {"defaultValue":false} */ ,
+		withCookies: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		proxyHost: ProxyURL /* STRING {"defaultValue":""} */ ,
+		url: url /* STRING */ ,
+		content: undefined /* STRING */ ,
+		timeout: undefined /* NUMBER {"defaultValue":60} */ ,
+		keepAlivePool: undefined /* STRING */ ,
+		proxyPort: ProxyPort /* INTEGER {"defaultValue":8080} */ ,
+		trustStorePassword: undefined /* STRING */ ,
+		password: undefined /* STRING */ ,
+		withResponseHeaders: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		domain: undefined /* STRING {"defaultValue":""} */ ,
+		trustStorePath: undefined /* STRING */ ,
+		contentType: undefined /* STRING */ ,
+		keyStorePath: undefined /* STRING */ ,
+		username: undefined /* STRING */
+	});
+	testResult = result.response == expectedResponse;
+    if (!testResult) str_Comments = "Received response: "+result.response;
+} catch (err) {
+	testResult = false;
+	str_Comments = "Error: " + err.message + "; Stack: " + err.stack;
+}
+
+//Build the results infotable
+var params = {
+	infoTableName: "InfoTable",
+	dataShapeName: "ContentLoaderExtended.TestResultData_DS"
+};
+
+var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+let endTS = new Date();
+PreviousTestResults.AddRow({
+	testName: TestName,
+	inputParams: InputParams,
+	expectedOutput: ExpectedOutput,
+	startTimestamp: startTS,
+	endTimestamp: endTS,
+	passed: testResult,
+	comments: str_Comments
+});
+result = PreviousTestResults;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="UnauthPatch"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting test --- " + TestName);
+let startTS = new Date();
+pause(1);
+let testResult;
+let str_Comments;
+//Input data is defined in the CreateTestData Service
+try {
+	let url = InputParams.URLEndpoint;
+	//it record
+	let expectedResponse = ExpectedOutput.Response;
+	// result: JSON
+	let result = Resources["ContentLoaderExtended"].ExecuteHttpRequest({
+		proxyScheme: undefined /* STRING {"defaultValue":"http"} */ ,
+		headers: undefined /* JSON */ ,
+		ignoreSSLErrors: undefined /* BOOLEAN */ ,
+		method: "PATCH" /* STRING */ ,
+		useNTLM: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		keyStorePassword: undefined /* STRING */ ,
+		withResponseStatus: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		workstation: undefined /* STRING {"defaultValue":""} */ ,
+		useProxy: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		withCookies: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		proxyHost: undefined /* STRING {"defaultValue":""} */ ,
+		url: url /* STRING */ ,
+		content: undefined /* STRING */ ,
+		timeout: undefined /* NUMBER {"defaultValue":60} */ ,
+		keepAlivePool: undefined /* STRING */ ,
+		proxyPort: undefined /* INTEGER {"defaultValue":8080} */ ,
+		trustStorePassword: undefined /* STRING */ ,
+		password: undefined /* STRING */ ,
+		withResponseHeaders: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		domain: undefined /* STRING {"defaultValue":""} */ ,
+		trustStorePath: undefined /* STRING */ ,
+		contentType: undefined /* STRING */ ,
+		keyStorePath: undefined /* STRING */ ,
+		username: undefined /* STRING */
+	});
+	testResult = result.response == expectedResponse;
+    if (!testResult) str_Comments = "Received response: "+result.response;
+} catch (err) {
+	testResult = false;
+	str_Comments = "Error: " + err.message + "; Stack: " + err.stack;
+}
+
+//Build the results infotable
+var params = {
+	infoTableName: "InfoTable",
+	dataShapeName: "ContentLoaderExtended.TestResultData_DS"
+};
+
+var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+let endTS = new Date();
+PreviousTestResults.AddRow({
+	testName: TestName,
+	inputParams: InputParams,
+	expectedOutput: ExpectedOutput,
+	startTimestamp: startTS,
+	endTimestamp: endTS,
+	passed: testResult,
+	comments: str_Comments
+});
+result = PreviousTestResults;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="UnauthPost"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting test --- " + TestName);
+let startTS = new Date();
+pause(1);
+let testResult;
+let str_Comments;
+//Input data is defined in the CreateTestData Service
+try {
+	let url = InputParams.URLEndpoint;
+	//it record
+	let expectedResponse = ExpectedOutput.Response;
+	// result: JSON
+	let result = Resources["ContentLoaderExtended"].ExecuteHttpRequest({
+		proxyScheme: undefined /* STRING {"defaultValue":"http"} */ ,
+		headers: undefined /* JSON */ ,
+		ignoreSSLErrors: undefined /* BOOLEAN */ ,
+		method: "POST" /* STRING */ ,
+		useNTLM: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		keyStorePassword: undefined /* STRING */ ,
+		withResponseStatus: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		workstation: undefined /* STRING {"defaultValue":""} */ ,
+		useProxy: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		withCookies: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		proxyHost: undefined /* STRING {"defaultValue":""} */ ,
+		url: url /* STRING */ ,
+		content: undefined /* STRING */ ,
+		timeout: undefined /* NUMBER {"defaultValue":60} */ ,
+		keepAlivePool: undefined /* STRING */ ,
+		proxyPort: undefined /* INTEGER {"defaultValue":8080} */ ,
+		trustStorePassword: undefined /* STRING */ ,
+		password: undefined /* STRING */ ,
+		withResponseHeaders: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		domain: undefined /* STRING {"defaultValue":""} */ ,
+		trustStorePath: undefined /* STRING */ ,
+		contentType: undefined /* STRING */ ,
+		keyStorePath: undefined /* STRING */ ,
+		username: undefined /* STRING */
+	});
+	testResult = result.response == expectedResponse;
+    if (!testResult) str_Comments = "Received response: "+result.response;
+} catch (err) {
+	testResult = false;
+	str_Comments = "Error: " + err.message + "; Stack: " + err.stack;
+}
+
+//Build the results infotable
+var params = {
+	infoTableName: "InfoTable",
+	dataShapeName: "ContentLoaderExtended.TestResultData_DS"
+};
+
+var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+let endTS = new Date();
+PreviousTestResults.AddRow({
+	testName: TestName,
+	inputParams: InputParams,
+	expectedOutput: ExpectedOutput,
+	startTimestamp: startTS,
+	endTimestamp: endTS,
+	passed: testResult,
+	comments: str_Comments
+});
+result = PreviousTestResults;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation><ServiceImplementation description="" handlerName="Script" name="UnauthPut"><ConfigurationTables><ConfigurationTable dataShapeName="" description="" isMultiRow="false" name="Script" ordinal="0"><DataShape><FieldDefinitions><FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/></FieldDefinitions></DataShape><Rows><Row><code><![CDATA[logger.warn("---Starting test --- " + TestName);
+let startTS = new Date();
+pause(1);
+let testResult;
+let str_Comments;
+//Input data is defined in the CreateTestData Service
+try {
+	let url = InputParams.URLEndpoint;
+	//it record
+	let expectedResponse = ExpectedOutput.Response;
+	// result: JSON
+	let result = Resources["ContentLoaderExtended"].ExecuteHttpRequest({
+		proxyScheme: undefined /* STRING {"defaultValue":"http"} */ ,
+		headers: undefined /* JSON */ ,
+		ignoreSSLErrors: undefined /* BOOLEAN */ ,
+		method: "PUT" /* STRING */ ,
+		useNTLM: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		keyStorePassword: undefined /* STRING */ ,
+		withResponseStatus: true /* BOOLEAN {"defaultValue":false} */ ,
+		workstation: undefined /* STRING {"defaultValue":""} */ ,
+		useProxy: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		withCookies: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		proxyHost: undefined /* STRING {"defaultValue":""} */ ,
+		url: url /* STRING */ ,
+		content: undefined /* STRING */ ,
+		timeout: undefined /* NUMBER {"defaultValue":60} */ ,
+		keepAlivePool: undefined /* STRING */ ,
+		proxyPort: undefined /* INTEGER {"defaultValue":8080} */ ,
+		trustStorePassword: undefined /* STRING */ ,
+		password: undefined /* STRING */ ,
+		withResponseHeaders: undefined /* BOOLEAN {"defaultValue":false} */ ,
+		domain: undefined /* STRING {"defaultValue":""} */ ,
+		trustStorePath: undefined /* STRING */ ,
+		contentType: undefined /* STRING */ ,
+		keyStorePath: undefined /* STRING */ ,
+		username: undefined /* STRING */
+	});
+	testResult = result.response == expectedResponse;
+    if (!testResult) str_Comments = "Received response: "+result.response;
+} catch (err) {
+	testResult = false;
+	str_Comments = "Error: " + err.message + "; Stack: " + err.stack;
+}
+
+//Build the results infotable
+var params = {
+	infoTableName: "InfoTable",
+	dataShapeName: "ContentLoaderExtended.TestResultData_DS"
+};
+
+var result = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape(params);
+let endTS = new Date();
+PreviousTestResults.AddRow({
+	testName: TestName,
+	inputParams: InputParams,
+	expectedOutput: ExpectedOutput,
+	startTimestamp: startTS,
+	endTimestamp: endTS,
+	passed: testResult,
+	comments: str_Comments
+});
+result = PreviousTestResults;]]></code></Row></Rows></ConfigurationTable></ConfigurationTables></ServiceImplementation></ServiceImplementations><Subscriptions/></ThingShape><PropertyBindings/><RemotePropertyBindings/><RemoteServiceBindings/><RemoteEventBindings/><AlertConfigurations/><ImplementedShapes/><ThingProperties/><ConfigurationChanges><ConfigurationChange changeAction="CREATE" changeReason="header : name : updated&#10;" timestamp="2026-08-11T23:14:24.682+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : AddSheetToExistingExcelFile : service deleted&#10;CreateCSVFile : service deleted&#10;CreateExcelFile : service deleted&#10;CreateFileRepository : service deleted&#10;OverwriteExcelFileSameSheet : service deleted&#10;ReadExcelToInfotable : service deleted&#10;" timestamp="2026-08-11T23:19:54.969+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;UnauthGet : service added&#10;ReadExcelWithRangeToInfotable : service deleted&#10;" timestamp="2026-08-11T23:20:16.140+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-11T23:22:34.708+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthGet : service updated&#10;" timestamp="2026-08-11T23:22:56.469+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : DeleteTestData : service updated&#10;" timestamp="2026-08-11T23:23:53.986+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : RunAllTests : service updated&#10;" timestamp="2026-08-11T23:25:35.146+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthGet : service updated&#10;" timestamp="2026-08-11T23:26:04.647+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthGet : service updated&#10;UnauthPost : service added&#10;" timestamp="2026-08-11T23:52:06.712+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-11T23:52:13.266+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-11T23:52:57.329+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthPost : service updated&#10;" timestamp="2026-08-11T23:54:07.114+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-11T23:54:37.170+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-11T23:55:54.225+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;UnauthDelete : service added&#10;" timestamp="2026-08-11T23:56:08.838+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthDelete : service updated&#10;" timestamp="2026-08-11T23:57:21.851+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-11T23:57:54.402+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthDelete : service updated&#10;" timestamp="2026-08-12T00:01:28.179+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;UnauthPut : service added&#10;" timestamp="2026-08-12T00:02:22.440+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthPut : service updated&#10;" timestamp="2026-08-12T00:02:44.830+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : RunAllTests : service updated&#10;" timestamp="2026-08-12T00:03:45.622+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;UnauthPatch : service added&#10;" timestamp="2026-08-12T00:04:05.504+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthPatch : service updated&#10;" timestamp="2026-08-12T00:05:31.694+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : RunAllTests : service updated&#10;" timestamp="2026-08-12T00:08:20.173+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;BasicAuthGet : service added&#10;" timestamp="2026-08-12T00:08:37.024+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-12T00:09:32.527+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : service updated&#10;" timestamp="2026-08-12T00:09:54.695+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="header : implementedShapes : updated&#10;" timestamp="2026-08-13T19:10:12.190+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : input parameter PreviousTestResults updated, inputs updated&#10;" timestamp="2026-08-13T19:13:29.106+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : service updated&#10;UnauthDelete : input parameter PreviousTestResults updated, inputs updated&#10;" timestamp="2026-08-13T19:13:53.911+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthDelete : output updated&#10;" timestamp="2026-08-13T19:13:59.729+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : output updated&#10;" timestamp="2026-08-13T19:14:09.976+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : input parameter PreviousTestResults updated, inputs updated&#10;UnauthDelete : input parameter PreviousTestResults updated, inputs updated&#10;UnauthGet : input parameter PreviousTestResults updated, inputs updated&#10;" timestamp="2026-08-13T20:14:18.325+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthGet : output updated&#10;" timestamp="2026-08-13T20:14:31.662+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthGet : service updated&#10;" timestamp="2026-08-13T20:14:42.943+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthPatch : input parameter PreviousTestResults updated, inputs updated, output updated&#10;" timestamp="2026-08-13T20:15:01.715+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthPost : input parameter PreviousTestResults updated, inputs updated, output updated&#10;" timestamp="2026-08-13T20:15:21.839+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthPut : input parameter PreviousTestResults updated, inputs updated, output updated&#10;" timestamp="2026-08-13T20:15:38.933+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="header : implementedShapes : updated&#10;" timestamp="2026-08-14T13:01:30.315+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service added&#10;" timestamp="2026-08-14T13:02:00.070+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;FormatTestResults : service added&#10;" timestamp="2026-08-14T13:02:52.339+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : FormatTestResults : service updated&#10;DeleteTestData : service added&#10;" timestamp="2026-08-14T13:05:20.052+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : DeleteTestData : input parameter InputParams added, inputs updated, output updated&#10;" timestamp="2026-08-14T13:05:55.314+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : DeleteTestData : service updated&#10;" timestamp="2026-08-14T13:06:27.863+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : FormatTestResults : output updated&#10;" timestamp="2026-08-14T13:06:43.939+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : FormatTestResults : service updated&#10;RunAllTests : service added&#10;" timestamp="2026-08-14T13:07:20.633+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : RunAllTests : service updated&#10;RunAllTestsFormatResult : service added&#10;" timestamp="2026-08-14T13:08:45.342+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : service updated&#10;" timestamp="2026-08-14T13:21:56.398+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : service updated&#10;" timestamp="2026-08-14T13:22:38.890+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : service updated&#10;" timestamp="2026-08-14T13:26:06.269+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : BasicAuthGet : service updated&#10;BasicAuthPost : service added&#10;" timestamp="2026-08-14T13:27:28.287+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-14T13:28:08.800+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthGetProxy : service added&#10;" timestamp="2026-08-14T14:15:49.286+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-14T14:16:50.234+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-14T14:19:31.089+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-14T14:21:13.200+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-14T14:24:02.776+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthGetProxy : service updated&#10;" timestamp="2026-08-14T14:25:22.757+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : CreateTestData : service updated&#10;" timestamp="2026-08-14T14:25:46.920+03:00" user="Administrator"/><ConfigurationChange changeAction="MODIFY" changeReason="services : UnauthGetProxy : service updated&#10;" timestamp="2026-09-15T14:32:02.396+03:00" user="Administrator"/></ConfigurationChanges></Thing></Things><Logs/><Authenticators/><QueueProviderPackages/><ThingPackages/><NotificationDefinitions/><ApplicationKeys/><StateDefinitions/><ThingTemplates/><ExtensionPackages/><Organizations/><Menus/><ThingGroups/><Resources/><DataTags/><ThingShapes/><Subsystems/><NotificationContents/></Entities>

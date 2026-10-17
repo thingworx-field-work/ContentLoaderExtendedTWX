@@ -149,38 +149,122 @@ let result = Resources.ContentLoaderExtended.ExecuteHttpMultipartRequest(
 
 ## Development
 
-After cloning the repository, please add the following files into `lib/common`. These files can be
-obtained from the ThingWorx installation directory,
-in `/apache-tomcat/webapps/Thingworx/WEB-INF/lib`.
-The version numbers listed below should serve as just a recommendation, as the actual file versions
-found in the ThingWorx installation directory might be different.
+The build uses the Gradle wrapper (Gradle 9) and needs a JDK 17 or newer to run.
 
-* `json-20171018.jar`
-* `thingworx-common-9.2.3-b189.jar`
-* `thingworx-platform-common-9.2.3-b189.jar`
-* `joda-time-2.9.jar`
-* `slf4j-api-1.7.12.jar`
-* `logback-core-1.0.13.jar`
-* `logback-classic-1.0.13.jar`
+### ThingWorx library dependencies
 
-The folder layout can be modified by editing the project.ext section in the build.gradle file. The
+
+This repository depends on two proprietary ThingWorx libraries that are **not** included in this repository. After cloning, you must
+manually copy the following files into `lib/twxSdk`. They can be found either in the ThingWorx installation
+directory, in `apache-tomcat/webapps/Thingworx/WEB-INF/lib` or in the manual ThingWorx installation archive `..._ThingWorx-Platform-Postgres-<version>.zip`
+(extract the the Thingworx.war file from the archive and look in `Thingworx/WEB-INF/lib`):
+
+* `thingworx-common-<version>.jar`
+* `thingworx-platform-common-<version>.jar`
+
+The build is known to work with the 9.5 and 10.1 SDKs. The extension is compiled for Java 11, so it
+still loads on older ThingWorx versions. Other libraries that ThingWorx already provides (HttpClient,
+commons-io, org.json, slf4j, logback) are downloaded from Maven Central and are not bundled with the extension.
+
+The GitLab pipeline downloads the SDK from the project's generic package registry instead, from the package
+`thingworx-sdk` with the version set in `TWX_SDK_VERSION` in `.gitlab-ci.yml`. To use a different SDK version,
+upload the jars once with a personal access token that has the `api` scope, then update `TWX_SDK_VERSION`:
+
+```bash
+for jar in thingworx-common thingworx-platform-common; do
+  curl --fail --header "PRIVATE-TOKEN: <token>" --upload-file "lib/twxSdk/${jar}-9.5.0-b143.jar" \
+    "https://gitlab.com/api/v4/projects/43130121/packages/generic/thingworx-sdk/9.5.0-b143/${jar}-9.5.0-b143.jar"
+done
+```
+
+To share one SDK package between several extensions, upload it to a single project, set `TWX_SDK_PROJECT_ID`
+to that project's id, and allow this project's CI job token to access it.
+
+### Build
+
+The folder layout can be modified by editing the `ext` section in the build.gradle file. The
 default layout is as following:
 
 ```gradle
-	uiDir = "/ui" // if there are any widgets
-	localJarDir = "/lib/local" // if you have any local jars that need to be included in the project, add them here
-	srcDir = "${baseDir}/src/main" // where are the sources located
-	buildDir = "${baseDir}/build" // where is the build saved
-	configDir = "${baseDir}/configfiles" // folder location of the metadata.xml file
-	entitiesDir = "${baseDir}/configfiles/Entities" // folder location Entities that are included with the extension
-	zipDir = "${baseDir}/zip" // where to store the generated zip 
-	thingworxSdkDir = "${baseDir}/lib/twxSdk" // where the thingworx sdk is located
+	uiDir = "$baseDir/ui" // UI widgets folder
+	localJarDir = "$baseDir/lib/local" // Local jars folder, packaged with the extension
+	srcDir = "$baseDir/src/main" // Source directory
+	configDir = "$baseDir/configfiles" // Config files folder, including any Entities
+	zipDir = "$baseDir/zip" // Output zip folder
+	thingworxSdkDir = "$baseDir/lib/twxSdk" // Thingworx SDK folder
 ```
+
+The version of the extension is read from `packageVersion` in `configfiles/metadata.xml`.
 
 The thingworx related gradle tasks are:
 
-* `packageExtension`: creates in the zipDir an zip archive with the extension
-* `upload`: uploads the extension to the specified TWX server.
+* `packageExtension`: creates `zip/ContentLoaderExtended_Extension-v<version>.zip` with the extension
+* `upload`: uploads the extension to the TWX server set in `thingworxServerRoot`
+* `incrementExtensionVersion`: increments the patch version in `configfiles/metadata.xml`
+
+### Releasing
+
+The GitLab pipeline builds the extension on every push. To publish a release, push a tag named
+`release/<version>`, where `<version>` matches `packageVersion` in `configfiles/metadata.xml`
+(for example `release/2.2.0`). The pipeline then uploads the zip to the package registry and creates a
+GitLab release.
+
+
+## Unit testing framework
+
+This repository contains now a test suite that can be executed to verify compatibility with the desired ThingWorx version. These tests are intended to be executed each time when testing a new ThingWorx version or when adding/changing functionalities.
+
+### Testing framework reference
+
+When adding a new end-user intended Service, a unit test should be added for that functionality.
+
+The testing framework has the following characteristics:
+
+- each test is defined as a ThingWorx service
+- tests have access to the previous test results inside of them; they pass an empty `INFOTABLE` for this purpose, to which rows are added after each test execution
+- there are pre- and post- services: `CreateTestData` and `DeleteTestData`; `CreateTestData` returns a JSON configuration field that is intended to be consumed by the tests themselves.
+- all tests are executed via the `RunAllTests` (or via `RunAllTestsFormatResult` that returns the result as a `HTML` that can be saved as test result artefact).
+
+#### How to run the tests:
+
+1. Install [Mockoon](https://mockoon.com/). This is an open-source application that allows designing and running mock REST APIs. It offers desktop clients for Windows, Linux and Mac.A list of test endpoints has been created for the tests defined in this extension. 
+2. Copy in clipboard all the content of the `testEntities/mockoon_test_endpoints.json`
+3. In Mockoon, select File/New local environment from clipboard ![alt text](image.png)
+4. Download the `testEntities/ContentLoaderExtended.Tests.xml` and Import / From File.
+5. In Thingworx, navigate to `ContentLoaderExtended.Tests` Thing
+6. Execute the service `RunAllTests:INFOTABLE`
+
+#### How to **add a new test**:
+
+1. **Navigate** to `ContentLoaderExtended.Tests` Thing
+2. **Edit** the `CreateTestData` Service. Duplicate a test and add it at the end.
+
+   Increment the test number and its associated variable names. Modify the `TestName`, `ServiceName`, `InputParams` and `ExpectedOutput` fields as needed for your test - all are mandatory.
+
+   ```javascript
+   //test 7
+   let test7 = {
+       TestName: "7. Basic Authenticated Post",
+       ServiceName: "BasicAuthPost",
+       InputParams: {
+            URLEndpoint: str_HTTP+str_BaseURL+"TestPostServiceBasicAuth",
+            User:"myUser",
+            Password:"myPassword"
+       },
+       ExpectedOutput: {
+            Response: "{\"MySampleKey\":\"MySampleValue\"}"
+       }
+   };
+   result.tests.push(test7);
+   ```
+
+3. **Duplicate** one of the existing test services (eg: `BasicAuthGet`).
+
+   Use for the new service the `ServiceName` chosen above.
+   In your test implementation use the `InputParams` and `ExpectedOutput` defined above.
+   Note that you have access to the `PreviousTestResults`, but typically you should use only the `InputParams` and `ExpectedOutputs`.
+
+4. **Save** all your modifications and **execute** `RunAllTests`. All tests should pass.
 
 
 # Disclaimer

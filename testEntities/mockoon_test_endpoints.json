@@ -1,0 +1,413 @@
+{
+    "uuid": "da8b70ab-4bdb-43f4-b1f7-dde55c029134",
+    "lastMigration": 33,
+    "name": "Content loader extension",
+    "endpointPrefix": "contentloadertest",
+    "latency": 0,
+    "port": 3001,
+    "hostname": "",
+    "folders": [],
+    "routes": [
+        {
+            "uuid": "c682021e-a16f-4c56-afe3-da0cfa0246a2",
+            "type": "http",
+            "documentation": "",
+            "method": "get",
+            "endpoint": "TestGetServiceUnauth",
+            "responses": [
+                {
+                    "uuid": "9ec911c0-d7fa-43c9-bc3b-3ac480c6e302",
+                    "body": "{\"MySampleKey\":\"MySampleValue\"}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [
+                        {
+                            "key": "Accept",
+                            "value": "application/json"
+                        }
+                    ],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        },
+        {
+            "uuid": "7473f231-cf8e-47e5-9ed1-6c4369174201",
+            "type": "http",
+            "documentation": "",
+            "method": "post",
+            "endpoint": "TestPostServiceUnauth",
+            "responses": [
+                {
+                    "uuid": "27106104-22ac-4b5b-a6a6-bfc336d5a678",
+                    "body": "{\"MySamplePostKey\":\"MySamplePostValue\"}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        },
+        {
+            "uuid": "20767085-097d-41b0-9643-812e92011929",
+            "type": "http",
+            "documentation": "",
+            "method": "delete",
+            "endpoint": "TestDeleteServiceUnauth",
+            "responses": [
+                {
+                    "uuid": "7a5d6441-dcac-446f-90a0-494b2cd67b6e",
+                    "body": "{}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        },
+        {
+            "uuid": "f41a8c34-33c8-4500-b5f2-c36d297d225a",
+            "type": "http",
+            "documentation": "",
+            "method": "put",
+            "endpoint": "TestPutServiceUnauth",
+            "responses": [
+                {
+                    "uuid": "66014910-bd91-4b88-a391-aec34ea82ea5",
+                    "body": "{\"MySamplePutKey\":\"MySamplePutValue\"}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        },
+        {
+            "uuid": "54c79135-761b-4e04-9edc-7c95dd2c4e24",
+            "type": "http",
+            "documentation": "",
+            "method": "patch",
+            "endpoint": "TestPatchServiceUnauth",
+            "responses": [
+                {
+                    "uuid": "6666f4cf-d2eb-49ef-a3bd-9c2cbba00fca",
+                    "body": "{\"MySamplePatchKey\":\"MySamplePatchValue\"}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        },
+        {
+            "uuid": "c5441264-ff2e-4b9a-b062-66b7688a5247",
+            "type": "http",
+            "documentation": "",
+            "method": "get",
+            "endpoint": "TestGetServiceBasicAuth",
+            "responses": [
+                {
+                    "uuid": "a2a16c6b-ff70-4cfc-a751-1c746fe4a0c5",
+                    "body": "{\"MySampleKey\":\"MySampleValue\"}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [
+                        {
+                            "key": "Accept",
+                            "value": "application/json"
+                        }
+                    ],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                },
+                {
+                    "uuid": "47c4a2f2-9e69-4d62-a85d-ced4d8ccdbcb",
+                    "body": "{}",
+                    "latency": 0,
+                    "statusCode": 401,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [
+                        {
+                            "target": "header",
+                            "modifier": "Authorization",
+                            "value": "",
+                            "invert": false,
+                            "operator": "null"
+                        }
+                    ],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": false,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        },
+        {
+            "uuid": "c5211f3b-c0ba-4c66-9957-da2825893ec7",
+            "type": "http",
+            "documentation": "",
+            "method": "post",
+            "endpoint": "TestPostServiceBasicAuth",
+            "responses": [
+                {
+                    "uuid": "69cbd1b6-3cfe-4f83-8785-ef1b55b7672e",
+                    "body": "{\"MySampleKey\":\"MySampleValue\"}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [
+                        {
+                            "key": "Accept",
+                            "value": "application/json"
+                        }
+                    ],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                },
+                {
+                    "uuid": "8ec6b982-1286-4d3c-b094-0eb74d2036c2",
+                    "body": "{}",
+                    "latency": 0,
+                    "statusCode": 401,
+                    "label": "",
+                    "headers": [],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [
+                        {
+                            "target": "header",
+                            "modifier": "Authorization",
+                            "value": "",
+                            "invert": false,
+                            "operator": "null"
+                        }
+                    ],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": false,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        },
+        {
+            "uuid": "4262262f-7703-4250-b009-8783516f1aef",
+            "type": "http",
+            "documentation": "",
+            "method": "get",
+            "endpoint": "TestProxyGetServiceUnauth",
+            "responses": [
+                {
+                    "uuid": "9c7f45d9-d933-408d-8e88-64b8020a697e",
+                    "body": "{\"MySampleKey\":\"MySampleValue\"}",
+                    "latency": 0,
+                    "statusCode": 200,
+                    "label": "",
+                    "headers": [
+                        {
+                            "key": "Accept",
+                            "value": "application/json"
+                        }
+                    ],
+                    "bodyType": "INLINE",
+                    "filePath": "",
+                    "databucketID": "",
+                    "sendFileAsBody": false,
+                    "rules": [],
+                    "rulesOperator": "OR",
+                    "disableTemplating": false,
+                    "fallbackTo404": false,
+                    "default": true,
+                    "crudKey": "id",
+                    "callbacks": []
+                }
+            ],
+            "responseMode": null,
+            "streamingMode": null,
+            "streamingInterval": 0
+        }
+    ],
+    "rootChildren": [
+        {
+            "type": "route",
+            "uuid": "c682021e-a16f-4c56-afe3-da0cfa0246a2"
+        },
+        {
+            "type": "route",
+            "uuid": "7473f231-cf8e-47e5-9ed1-6c4369174201"
+        },
+        {
+            "type": "route",
+            "uuid": "20767085-097d-41b0-9643-812e92011929"
+        },
+        {
+            "type": "route",
+            "uuid": "f41a8c34-33c8-4500-b5f2-c36d297d225a"
+        },
+        {
+            "type": "route",
+            "uuid": "54c79135-761b-4e04-9edc-7c95dd2c4e24"
+        },
+        {
+            "type": "route",
+            "uuid": "c5441264-ff2e-4b9a-b062-66b7688a5247"
+        },
+        {
+            "type": "route",
+            "uuid": "c5211f3b-c0ba-4c66-9957-da2825893ec7"
+        },
+        {
+            "type": "route",
+            "uuid": "4262262f-7703-4250-b009-8783516f1aef"
+        }
+    ],
+    "proxyMode": true,
+    "proxyHost": "http://localhost:3001/contentloadertest/TestProxyGetServiceUnauth",
+    "proxyRemovePrefix": false,
+    "tlsOptions": {
+        "enabled": false,
+        "type": "CERT",
+        "pfxPath": "",
+        "certPath": "",
+        "keyPath": "",
+        "caPath": "",
+        "passphrase": ""
+    },
+    "cors": true,
+    "headers": [
+        {
+            "key": "Content-Type",
+            "value": "application/json"
+        },
+        {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+        },
+        {
+            "key": "Access-Control-Allow-Methods",
+            "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+        },
+        {
+            "key": "Access-Control-Allow-Headers",
+            "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+        }
+    ],
+    "proxyReqHeaders": [
+        {
+            "key": "",
+            "value": ""
+        }
+    ],
+    "proxyResHeaders": [
+        {
+            "key": "",
+            "value": ""
+        }
+    ],
+    "data": [],
+    "callbacks": []
+}

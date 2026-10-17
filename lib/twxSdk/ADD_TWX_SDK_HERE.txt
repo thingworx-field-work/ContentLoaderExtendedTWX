@@ -1,0 +1,1 @@
+Copy thingworx-common-<version>.jar and thingworx-platform-common-<version>.jar here. See the Development section of the README.
